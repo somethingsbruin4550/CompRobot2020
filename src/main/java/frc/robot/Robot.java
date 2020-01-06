@@ -7,9 +7,14 @@
 
 package frc.robot;
 
+// import com.revrobotics.ControlType;
+import com.revrobotics.CANSparkMax.IdleMode;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.parent.PilotMap;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -23,6 +28,9 @@ public class Robot extends TimedRobot {
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
+
+  Turret turret = new Turret();//4, MotorType.kBrushed, IdleMode.kBrake, false);
+  Yeeter yeeter = new Yeeter(3, 2, false, false, MotorType.kBrushed, IdleMode.kBrake);
 
   /**
    * This function is run when the robot is first started up and should be
@@ -86,6 +94,10 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
+    if(!OI.button(PilotMap.TRIGGER))
+      turret.set(OI.axis(PilotMap.X_AXIS));
+    else 
+      turret.lockOn();
   }
 
   /**
