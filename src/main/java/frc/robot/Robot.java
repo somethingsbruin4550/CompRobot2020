@@ -7,9 +7,13 @@
 
 package frc.robot;
 
+import java.sql.Driver;
+
+import edu.wpi.first.wpilibj.DriverStation;
+
 // import com.revrobotics.ControlType;
-import com.revrobotics.CANSparkMax.IdleMode;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+// import com.revrobotics.CANSparkMax.IdleMode;
+// import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -28,9 +32,10 @@ public class Robot extends TimedRobot {
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
+  
 
   Turret turret = new Turret();//4, MotorType.kBrushed, IdleMode.kBrake, false);
-  Yeeter yeeter = new Yeeter(3, 2, false, false, MotorType.kBrushed, IdleMode.kBrake);
+  // Yeeter yeeter = new Yeeter(3, 2, false, false, MotorType.kBrushed, IdleMode.kBrake);
 
   /**
    * This function is run when the robot is first started up and should be
@@ -41,6 +46,23 @@ public class Robot extends TimedRobot {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
+    int alliance;
+    
+    switch(DriverStation.getInstance().getAlliance()){
+      case Blue:
+        alliance = 1;
+      break;
+
+      case Red:
+        alliance = 0; 
+      break;
+      
+      case Invalid:
+        alliance = -1;
+      break;
+    }
+
+    // Shooter.start();
   }
 
   /**
@@ -94,10 +116,17 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
-    if(!OI.button(PilotMap.TRIGGER))
-      turret.set(OI.axis(PilotMap.X_AXIS));
+    
+
+    if(!OI.button(PilotMap.STICK_BACK))
+      turret.set(OI.normalize(OI.axis(PilotMap.X_AXIS), -1, 1, 0.05));
     else 
       turret.lockOn();
+
+    // if(OI.button(PilotMap.TRIGGER))
+    //   Shooter.shoot(0.01);
+
+    
   }
 
   /**

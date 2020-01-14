@@ -1,9 +1,9 @@
 package frc.robot;
 
 import com.revrobotics.CANEncoder;
+import com.revrobotics.CANError;
 import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.ControlType;
 
 //Documention: http://www.revrobotics.com/content/sw/max/sw-docs/java/com/revrobotics/CANSparkMax.html#%3Cinit%3E(int,com.revrobotics.CANSparkMaxLowLevel.MotorType)
 
@@ -22,8 +22,12 @@ public class CCSparkMax extends CANSparkMax{
      */
     public CCSparkMax(int deviceID, MotorType controlMode, IdleMode idleMode, boolean reverse){
         super(deviceID, controlMode);
-        super.setIdleMode(idleMode);
+
+        if(super.setIdleMode(idleMode) != CANError.kOk){
+            System.out.println("Spark Max Idle Mode Not Set");
+        }
         super.setInverted(reverse);
+        
 
         pidController = super.getPIDController();
         encoder = super.getEncoder();
@@ -35,6 +39,10 @@ public class CCSparkMax extends CANSparkMax{
      */
     public void set(double speed){
         super.set(speed);
+    }
+
+    public void disable(){
+        super.disable();
     }
 
     /**
@@ -49,12 +57,8 @@ public class CCSparkMax extends CANSparkMax{
      * Sets the encoder position
      * @param pos The new encoder position
      */
-   // public void setPosition(double pos){
-     //   encoder.setPosition(pos);
-    //}
-
     public void setPosition(double pos){
-        pidController.setReference(pos, ControlType.kPosition);
+        encoder.setPosition(pos);
     }
 
     /**

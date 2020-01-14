@@ -5,13 +5,14 @@ import frc.parent.*;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-// import edu.wpi.first.wpilibj.Encoder;
-// import com.kauailabs.navx.frc.AHRS;
-// import edu.wpi.first.wpilibj.SPI;
-// import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.Encoder;
+import com.kauailabs.navx.frc.AHRS;
+import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.Timer;
 
 public class Chassis implements RobotMap{
 
+    public static AHRS gyro = new AHRS(SPI.Port.kMXP);
 
     public static CCSparkMax backLeft = new CCSparkMax(RobotMap.BACK_LEFT, MotorType.kBrushless, IdleMode.kBrake, RobotMap.BL_REVERSE);
     public static CCSparkMax frontLeft = new CCSparkMax(RobotMap.FORWARD_LEFT, MotorType.kBrushless, IdleMode.kBrake, RobotMap.BL_REVERSE);
@@ -19,18 +20,25 @@ public class Chassis implements RobotMap{
     public static CCSparkMax frontRight = new CCSparkMax(RobotMap.FORWARD_RIGHT, MotorType.kBrushless, IdleMode.kBrake, RobotMap.FR_REVERSE);
 
 
-    public static void driveSpd(double lspd, double rspd){
-        backLeft.set(lspd);
-        frontLeft.set(lspd);
-        backRight.set(rspd);
-        frontRight.set(rspd);
+    public static double leftSpd = 0;
+    public static double rightSpd = 0; 
+
+    public static void drive(){
+        backLeft.set(leftSpd);
+        frontLeft.set(leftSpd);
+        backRight.set(rightSpd);
+        frontRight.set(rightSpd);
+    }
+
+    public static void driveSpd(double lspd, double rspd)
+    {
+        leftSpd = lspd;
+        rightSpd = rspd; 
     }
 
     public static void driveAxis(double yAxis, double xAxis){
-        backLeft.set(OI.normalize((yAxis + xAxis), -1.0, 1.0));
-        frontLeft.set(OI.normalize((yAxis + xAxis), -1.0, 1.0));
-        backRight.set(OI.normalize((yAxis - xAxis), -1.0, 1.0));
-        frontRight.set(OI.normalize((yAxis - xAxis), -1.0, 1.0));
+        leftSpd = OI.normalize((yAxis + xAxis), -1.0, 1.0);
+        rightSpd = OI.normalize((yAxis - xAxis), -1.0, 1.0);
     }
 
 
@@ -43,5 +51,24 @@ public class Chassis implements RobotMap{
         frontLeft.setPosition(pos);
         backRight.setPosition(pos);
         frontRight.setPosition(pos);
+    }
+
+    public static void turnToAngle(double goal, double accepError, double debug){
+        double angle;
+        double error;
+        double input;
+
+        while(true){
+            angle = gyro.getAngle();
+            error = goal - angle;
+            input = OI.normalize(error/goal, -1.0, 1.0);
+
+            if(Math.abs(error) > accepError)
+                driveSpd(-input, input);
+            else {
+                driveSpd(0.0, 0.0);
+                break;
+            }
+        }
     }
 }

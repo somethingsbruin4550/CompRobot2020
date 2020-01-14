@@ -27,7 +27,7 @@ public class Turret implements RobotMap{
     private NetworkTableEntry yaw = cam.getEntry("yaw");
 
     public Turret(){//int chanOne, MotorType type, IdleMode idle, boolean rOne){
-        max = new CCSparkMax(4, MotorType.kBrushed, IdleMode.kBrake, false);
+        max = new CCSparkMax(1, MotorType.kBrushed, IdleMode.kBrake, true);
     }
 
     public void set(double spd){

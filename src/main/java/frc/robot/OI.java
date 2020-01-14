@@ -37,5 +37,12 @@ public class OI {
             return value;
     }
 
+    public static double normalize(double value, double min, double max, double zone){
+        if(value < zone && value > -zone)
+            value = 0;
+
+        return normalize(value, min, max);
+    }
+
 
 }
