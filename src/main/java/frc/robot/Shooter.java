@@ -9,29 +9,31 @@ import edu.wpi.first.wpilibj.Compressor;
 public class Shooter{
     //declares and inits shooter object
     //declares and inits compresser object
-    private static Solenoid shooter = new Solenoid(RobotMap.PCM_CAN, RobotMap.PCM_SOLENOID);
-    private static Compressor compressor = new Compressor(RobotMap.PCM_CAN);
+    // private static Solenoid shooter = new Solenoid(0);
+    // private static Compressor compressor = new Compressor(0);
     /**
      * starts compressor
     */
     public static void start(){
-        compressor.start();
+        // compressor.start();
 
     }
     /**
      * ends compressor
      */
     public static void end(){
-        compressor.stop();
+        // compressor.stop();
     }
     /**
      *
      * @param delay time in seconds in which the solenoid is open
      */
     public static void shoot(double delay){
-            shooter.set(true);
-            Timer.delay(delay);
-            shooter.set(false);
+            // shooter.set(true);
+    }
+
+    public static void stop(){
+        // shooter.set(false);
     }
     
     

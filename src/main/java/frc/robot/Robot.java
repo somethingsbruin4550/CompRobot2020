@@ -7,9 +7,15 @@
 
 package frc.robot;
 
-import java.sql.Driver;
+// import java.sql.Driver;
 
-import edu.wpi.first.wpilibj.DriverStation;
+// import com.revrobotics.ControlType;
+// import com.revrobotics.CANSparkMax.IdleMode;
+// import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
+import edu.wpi.first.wpilibj.Compressor;
+// import edu.wpi.first.wpilibj.DriverStation;
+// import edu.wpi.first.wpilibj.Solenoid;
 
 // import com.revrobotics.ControlType;
 // import com.revrobotics.CANSparkMax.IdleMode;
@@ -32,9 +38,13 @@ public class Robot extends TimedRobot {
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
-  
+  // private CCSparkMax max;
+  // private CCSparkMax one;
+  // private CCSparkMax two;
+  private Compressor compressor;
+  private ShiftDrive drive1;
 
-  Turret turret = new Turret();//4, MotorType.kBrushed, IdleMode.kBrake, false);
+  //Turret turret = new Turret();//4, MotorType.kBrushed, IdleMode.kBrake, false);
   // Yeeter yeeter = new Yeeter(3, 2, false, false, MotorType.kBrushed, IdleMode.kBrake);
 
   /**
@@ -43,26 +53,43 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
+    // Shooter.start();
+    compressor = new Compressor(0);
+    compressor.start();
+    drive1 = new ShiftDrive(1, 2, false, false, 0, 1);
+
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
-    int alliance;
-    
-    switch(DriverStation.getInstance().getAlliance()){
-      case Blue:
-        alliance = 1;
-      break;
+    // int alliance;
 
-      case Red:
-        alliance = 0; 
-      break;
+    // one = new CCSparkMax(1, MotorType.kBrushless, IdleMode.kBrake, false);
+    // two = new CCSparkMax(2, MotorType.kBrushless, IdleMode.kBrake, false);
+    
+    // switch(DriverStation.getInstance().getAlliance()){
+    //   case Blue:
+    //     alliance = 1;
+    //   break;
+
+    //   case Red:
+    //     alliance = 0; 
+    //   break;
       
-      case Invalid:
-        alliance = -1;
-      break;
-    }
+    //   case Invalid:
+    //     alliance = -1;
+    //   break;
+    // }
 
     // Shooter.start();
+    // int device = 4;
+    // System.out.println("about to instantiate max...");
+    // max = new CCSparkMax(device, MotorType.kBrushless, IdleMode.kBrake, false );
+
+    // max.setPID(0.05, 0.0, 0.0, 0.0);
+    // set the speed
+    // max.set(0.0);
+
+    // System.out.println("method roboInit() exit");
   }
 
   /**
@@ -75,6 +102,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
+    compressor.start();
   }
 
   /**
@@ -93,6 +121,16 @@ public class Robot extends TimedRobot {
     m_autoSelected = m_chooser.getSelected();
     // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
     System.out.println("Auto selected: " + m_autoSelected);
+
+
+// turn the wheel
+    // double pos = max.getPosition();
+    // System.out.println("position is " + pos);
+    // max.setPosition(0.0);
+    // max.pidController.setReference(1.0, ControlType.kPosition);
+    // System.out.println("position after move is " + max.getPosition());
+    
+
   }
 
   /**
@@ -116,17 +154,57 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
-    
 
-    if(!OI.button(PilotMap.STICK_BACK))
-      turret.set(OI.normalize(OI.axis(PilotMap.X_AXIS), -1, 1, 0.05));
-    else 
-      turret.lockOn();
+    // double xaxis = OI.axis(PilotMap.X_AXIS);
+    // double yaxis = OI.axis(PilotMap.Y_AXIS);
+    // System.out.println("x: " + xaxis + ",y:" + yaxis);
+    // Double pos = null;
+    // if (yaxis > 0.5) {
+    //   // max.setPosition(0.0);
+    //   pos = max.getPosition();
+    //   max.pidController.setReference(pos+1.0, ControlType.kPosition);
+    // }
+    // if (yaxis < -0.5) {
+    //   // max.setPosition(0.0);
+    //   pos = max.getPosition();
+    //   max.pidController.setReference(pos-1.0, ControlType.kPosition);
+    // }
+    // if (pos != null) {
+    //   System.out.println("pos: " + pos);
+    // }
+    // for (int i=0; i < 20; i++)  {
+    //   if (OI.button(i)) {
+    //     System.out.println("button " + i + " was pressed");
+    //   }
+    // }
+    // if(!OI.button(PilotMap.STICK_BACK))
+      // one.set(OI.normalize(OI.axis(PilotMap.Y_AXIS), -1, 1, 0.05));
+
+      // two.set(OI.normalize(OI.axis(PilotMap.Y_AXIS), -1, 1, 0.05));
+
+
+    // else 
+    //   turret.lockOn();
 
     // if(OI.button(PilotMap.TRIGGER))
     //   Shooter.shoot(0.01);
+    // else if(OI.button(PilotMap.STICK_MID))
+    //   Shooter.end();
+    drive1.setSpd(OI.normalize(OI.axis(PilotMap.Y_AXIS), -1.0, 1.0));
 
-    
+    if(OI.button(PilotMap.TRIGGER))
+    {
+      drive1.setFast(true);
+    }
+    else 
+    {
+      drive1.setFast(false);
+    }
+  }
+
+  @Override
+  public void disabledInit() {
+    compressor.stop();
   }
 
   /**
