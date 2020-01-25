@@ -5,7 +5,7 @@ This code is based on the *SummerCode2019* base.
 
 **ToDo:**  
   
-❌ Updated code for final robot version  
+❌ Update code for final robot version  
 ✔️ Split RobotMap into multiple files  
 ✔️ Added PilotMap for Logitech Attack 3 Joystick  
 ✔️ Created and implemented CCSparkMax  
