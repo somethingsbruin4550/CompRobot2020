@@ -48,6 +48,7 @@ public interface RobotMap {
     public static final int CLIMBER = -1;
 
     // Talon ports for the yeeter
-    public static final int YEETER = -1;
+    public static final int YEETER_ONE = -1;
+    public static final int YEETER_TWO = -1;
 
 }
