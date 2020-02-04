@@ -4,6 +4,7 @@ import com.revrobotics.CANEncoder;
 import com.revrobotics.CANError;
 import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.ControlType;
 
 //Documention: http://www.revrobotics.com/content/sw/max/sw-docs/java/com/revrobotics/CANSparkMax.html#%3Cinit%3E(int,com.revrobotics.CANSparkMaxLowLevel.MotorType)
 
@@ -59,6 +60,23 @@ public class CCSparkMax extends CANSparkMax{
      */
     public void setPosition(double pos){
         encoder.setPosition(pos);
+    }
+
+    /**
+     * Sets the position(in encoder tics) of the neo
+     * @param ref Position in encoder tics
+     */
+    public void setDistance(double dist){
+        pidController.setReference(dist, ControlType.kPosition);
+    }
+
+    /**
+     * Sets the velocity of the neo
+     * @param vel Veloctiy of the neo
+     */
+    public void setVelocity(double vel){
+        pidController.setReference(vel, ControlType.kVelocity);
+
     }
 
     /**

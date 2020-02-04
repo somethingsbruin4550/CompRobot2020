@@ -1,6 +1,7 @@
 package frc.robot;
 
 import frc.parent.*;
+import frc.robot.sensors.LemonLight;
 
 import com.revrobotics.CANSparkMax.*;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -9,9 +10,9 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 // import edu.wpi.first.wpilibj.AnalogPotentiometer;
 // import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.networktables.NetworkTableInstance;
+// import edu.wpi.first.networktables.NetworkTable;
+// import edu.wpi.first.networktables.NetworkTableEntry;
+// import edu.wpi.first.networktables.NetworkTableInstance;
 // import edu.wpi.first.networktables.NetworkTableType;
 // import edu.wpi.first.networktables.NetworkTableValue;
 
@@ -22,9 +23,6 @@ public class Turret implements RobotMap{
     // public CANEncoder encoder = new CANEncoder(super.tOne);
     // public AnalogPotentiometer potent = new AnalogPotentiometer(RobotMap.POTENTIOMETER);
     private CCSparkMax max;
-    private NetworkTableInstance table = NetworkTableInstance.getDefault();
-    private NetworkTable cam = table.getTable("chameleon-vision").getSubTable("USB Camera-B4.09.24.1");
-    private NetworkTableEntry yaw = cam.getEntry("yaw");
 
     public Turret(){//int chanOne, MotorType type, IdleMode idle, boolean rOne){
         max = new CCSparkMax(1, MotorType.kBrushed, IdleMode.kBrake, true);
@@ -39,10 +37,10 @@ public class Turret implements RobotMap{
     } 
 
     public void lockOn(){
-        double x = yaw.getDouble(0);
+        double x = LemonLight.getYaw();
         double error = Math.abs(x-0);
         double input = OI.normalize((error*5)/100, 0.2, 0.6);
-        boolean exists = cam.getEntry("is_valid").getBoolean(false);
+        boolean exists = LemonLight.hasTarget();
         
         if(exists){
             if(x > 2.0){

@@ -12,6 +12,6 @@ public class Yeeter{
 
     public void set(double spd){
         max1.set(spd);
-        max2.set(-spd);
+        max2.set(spd);
     }
 }
