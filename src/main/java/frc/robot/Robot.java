@@ -42,7 +42,8 @@ public class Robot extends TimedRobot {
   // private CCSparkMax one;
   // private CCSparkMax two;
   private Compressor compressor;
-  private ShiftDrive drive1;
+  private ShiftDrive driveRight;
+  private ShiftDrive driveLeft;
 
 
   //Turret turret = new Turret();//4, MotorType.kBrushed, IdleMode.kBrake, false);
@@ -57,7 +58,8 @@ public class Robot extends TimedRobot {
     // Shooter.start();
     compressor = new Compressor(0);
     compressor.start();
-    drive1 = new ShiftDrive(1, 2, false, false, 0, 1);
+    driveRight = new ShiftDrive(1, 2, false, false, 0, 1);
+    driveLeft = new ShiftDrive(3,4, false, false, 2, 3 );
 
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
@@ -191,16 +193,18 @@ public class Robot extends TimedRobot {
     //   Shooter.shoot(0.01);
     // else if(OI.button(PilotMap.STICK_MID))
     //   Shooter.end();
-    drive1.setSpd(OI.normalize(OI.axis(PilotMap.Y_AXIS), -1.0, 1.0));
-
     if(OI.button(PilotMap.TRIGGER))
     {
-      drive1.setFast(true);
+      driveRight.setFast(true);
+      driveLeft.setFast(true);
     }
     else 
     {
-      drive1.setFast(false);
+      driveRight.setFast(false);
+      driveLeft.setFast(false);
     }
+
+    driveSpd(OI.axis(PilotMap.X_AXIS), OI.axis(PilotMap.Y_AXIS));
   }
 
   @Override
@@ -213,5 +217,10 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void testPeriodic() {
+  }
+
+  public void driveSpd(double x, double y){
+    driveLeft.setSpd(OI.normalize(y+x, -1, 1));
+    driveRight.setSpd(OI.normalize(y-x, -1, 1));
   }
 }

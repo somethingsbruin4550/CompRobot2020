@@ -29,6 +29,7 @@ public class ShiftDrive
         max2.set(spd);
     }
 
+
     public void setFast(boolean fast)
     {
         if(fast)
