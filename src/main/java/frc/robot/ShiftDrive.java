@@ -1,6 +1,8 @@
 package frc.robot;
 
 import frc.robot.CCSparkMax;
+
+import com.revrobotics.ControlType;
 // import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -22,6 +24,22 @@ public class ShiftDrive
         shift1 = new Solenoid(solPort1);
         shift2 = new Solenoid(solPort2);
     }
+
+    public void setPID(double Kp, double Ki, double Kd, double Ff){
+        max1.setPID(Kp, Ki, Kd, Ff);
+        max2.setPID(Kp, Ki, Kd, Ff);
+    }
+
+    public void setPosition(double pos){
+        max1.pidController.setReference(pos, ControlType.kPosition);
+        max2.pidController.setReference(pos, ControlType.kPosition);
+    }
+
+    public void setAngle(double angle){
+        max1.pidController.setReference(angle, ControlType.kPosition);
+        max2.pidController.setReference(angle, ControlType.kPosition);
+    }
+
 
     public void setSpd(double spd)
     {

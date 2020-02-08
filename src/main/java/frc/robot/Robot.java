@@ -7,24 +7,14 @@
 
 package frc.robot;
 
-// import java.sql.Driver;
+import frc.parent.*;
+import frc.robot.sensors.*;
 
-// import com.revrobotics.ControlType;
-// import com.revrobotics.CANSparkMax.IdleMode;
-// import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
-import edu.wpi.first.wpilibj.Compressor;
-// import edu.wpi.first.wpilibj.DriverStation;
-// import edu.wpi.first.wpilibj.Solenoid;
-
-// import com.revrobotics.ControlType;
-// import com.revrobotics.CANSparkMax.IdleMode;
-// import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.parent.PilotMap;
+import edu.wpi.first.wpilibj.DriverStation;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -33,21 +23,15 @@ import frc.parent.PilotMap;
  * creating this project, you must also update the build.gradle file in the
  * project.
  */
-public class Robot extends TimedRobot {
+public class Robot extends TimedRobot implements RobotMap, ControMap {
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
+  private static final String kResetPIDs = "Reset PIDs";
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
-  // private CCSparkMax max;
-  // private CCSparkMax one;
-  // private CCSparkMax two;
-  private Compressor compressor;
-  private ShiftDrive driveRight;
-  private ShiftDrive driveLeft;
 
-
-  //Turret turret = new Turret();//4, MotorType.kBrushed, IdleMode.kBrake, false);
-  // Yeeter yeeter = new Yeeter(3, 2, false, false, MotorType.kBrushed, IdleMode.kBrake);
+  int alliance;
+  double spdmlt = 1;
 
   /**
    * This function is run when the robot is first started up and should be
@@ -55,44 +39,27 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-    // Shooter.start();
-    compressor = new Compressor(0);
-    compressor.start();
-    driveRight = new ShiftDrive(1, 2, false, false, 0, 1);
-    driveLeft = new ShiftDrive(3,4, false, false, 2, 3 );
-
+    
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
+    m_chooser.addOption("Reset PID Values", kResetPIDs);
     SmartDashboard.putData("Auto choices", m_chooser);
-    // int alliance;
-
-    // one = new CCSparkMax(1, MotorType.kBrushless, IdleMode.kBrake, false);
-    // two = new CCSparkMax(2, MotorType.kBrushless, IdleMode.kBrake, false);
     
-    // switch(DriverStation.getInstance().getAlliance()){
-    //   case Blue:
-    //     alliance = 1;
-    //   break;
+    LemonLight.setLightChannel(9);
+  
+    switch(DriverStation.getInstance().getAlliance()){
+      case Blue:
+        alliance = 1;
+      break;
 
-    //   case Red:
-    //     alliance = 0; 
-    //   break;
+      case Red:
+        alliance = 0; 
+      break;
       
-    //   case Invalid:
-    //     alliance = -1;
-    //   break;
-    // }
-
-    // Shooter.start();
-    // int device = 4;
-    // System.out.println("about to instantiate max...");
-    // max = new CCSparkMax(device, MotorType.kBrushless, IdleMode.kBrake, false );
-
-    // max.setPID(0.05, 0.0, 0.0, 0.0);
-    // set the speed
-    // max.set(0.0);
-
-    // System.out.println("method roboInit() exit");
+      case Invalid:
+        alliance = -1;
+      break;
+    }
   }
 
   /**
@@ -105,7 +72,6 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-    compressor.start();
   }
 
   /**
@@ -121,18 +87,25 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+    Chassis.setPID(0, 0, 0, 0);
     m_autoSelected = m_chooser.getSelected();
     // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
     System.out.println("Auto selected: " + m_autoSelected);
-
-
-// turn the wheel
-    // double pos = max.getPosition();
-    // System.out.println("position is " + pos);
-    // max.setPosition(0.0);
-    // max.pidController.setReference(1.0, ControlType.kPosition);
-    // System.out.println("position after move is " + max.getPosition());
     
+
+    switch (m_autoSelected) {
+      case kCustomAuto:
+        Chassis.setPosition(5);
+        Chassis.setAngle(5);
+        break;
+      case kDefaultAuto:
+        break;
+      case kResetPIDs:
+        break;
+      default:
+        
+        break;
+    }
 
   }
 
@@ -141,15 +114,12 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousPeriodic() {
-    switch (m_autoSelected) {
-      case kCustomAuto:
-        // Put custom auto code here
-        break;
-      case kDefaultAuto:
-      default:
-        // Put default auto code here
-        break;
-    }
+    
+  }
+
+  @Override
+  public void teleopInit() {
+    LemonLight.setLight(true);
   }
 
   /**
@@ -157,59 +127,13 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
-
-    // double xaxis = OI.axis(PilotMap.X_AXIS);
-    // double yaxis = OI.axis(PilotMap.Y_AXIS);
-    // System.out.println("x: " + xaxis + ",y:" + yaxis);
-    // Double pos = null;
-    // if (yaxis > 0.5) {
-    //   // max.setPosition(0.0);
-    //   pos = max.getPosition();
-    //   max.pidController.setReference(pos+1.0, ControlType.kPosition);
-    // }
-    // if (yaxis < -0.5) {
-    //   // max.setPosition(0.0);
-    //   pos = max.getPosition();
-    //   max.pidController.setReference(pos-1.0, ControlType.kPosition);
-    // }
-    // if (pos != null) {
-    //   System.out.println("pos: " + pos);
-    // }
-    // for (int i=0; i < 20; i++)  {
-    //   if (OI.button(i)) {
-    //     System.out.println("button " + i + " was pressed");
-    //   }
-    // }
-    // if(!OI.button(PilotMap.STICK_BACK))
-      // one.set(OI.normalize(OI.axis(PilotMap.Y_AXIS), -1, 1, 0.05));
-
-      // two.set(OI.normalize(OI.axis(PilotMap.Y_AXIS), -1, 1, 0.05));
-
-
-    // else 
-    //   turret.lockOn();
-
-    // if(OI.button(PilotMap.TRIGGER))
-    //   Shooter.shoot(0.01);
-    // else if(OI.button(PilotMap.STICK_MID))
-    //   Shooter.end();
-    if(OI.button(PilotMap.TRIGGER))
-    {
-      driveRight.setFast(true);
-      driveLeft.setFast(true);
-    }
-    else 
-    {
-      driveRight.setFast(false);
-      driveLeft.setFast(false);
-    }
-
-    driveSpd(OI.axis(PilotMap.X_AXIS), OI.axis(PilotMap.Y_AXIS));
-  }
+    Chassis.drive();
+    Chassis.driveAxis(OI.axis(PilotMap.Y_AXIS), OI.axis(PilotMap.X_AXIS));      
+   }
 
   @Override
   public void disabledInit() {
-    compressor.stop();
+   LemonLight.setLight(false);
   }
 
   /**
@@ -217,10 +141,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void testPeriodic() {
-  }
+    LemonLight.setLight(true);
 
-  public void driveSpd(double x, double y){
-    driveLeft.setSpd(OI.normalize(y+x, -1, 1));
-    driveRight.setSpd(OI.normalize(y-x, -1, 1));
   }
 }

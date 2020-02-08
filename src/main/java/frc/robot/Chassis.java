@@ -14,20 +14,15 @@ public class Chassis implements RobotMap{
 
     public static AHRS gyro = new AHRS(SPI.Port.kMXP);
 
-    public static CCSparkMax backLeft = new CCSparkMax(RobotMap.BACK_LEFT, MotorType.kBrushless, IdleMode.kBrake, RobotMap.BL_REVERSE);
-    public static CCSparkMax frontLeft = new CCSparkMax(RobotMap.FORWARD_LEFT, MotorType.kBrushless, IdleMode.kBrake, RobotMap.BL_REVERSE);
-    public static CCSparkMax backRight = new CCSparkMax(RobotMap.BACK_RIGHT, MotorType.kBrushless, IdleMode.kBrake, RobotMap.BR_REVERSE);
-    public static CCSparkMax frontRight = new CCSparkMax(RobotMap.FORWARD_RIGHT, MotorType.kBrushless, IdleMode.kBrake, RobotMap.FR_REVERSE);
-
+    public static ShiftDrive driveRight = new ShiftDrive(1, 2, false, false, 0, 1);
+    public static ShiftDrive driveLeft = new ShiftDrive(3,4, false, false, 2, 3 ); 
 
     public static double leftSpd = 0;
     public static double rightSpd = 0; 
 
     public static void drive(){
-        backLeft.set(leftSpd);
-        frontLeft.set(leftSpd);
-        backRight.set(rightSpd);
-        frontRight.set(rightSpd);
+        driveRight.setSpd(rightSpd);
+        driveLeft.setSpd(leftSpd);    
     }
 
     public static void driveSpd(double lspd, double rspd)
@@ -41,34 +36,18 @@ public class Chassis implements RobotMap{
         rightSpd = OI.normalize((yAxis - xAxis), -1.0, 1.0);
     }
 
-
-    public static void driveDist(double pos, double Kp, double Ki, double Kd, double Ff){
-        backLeft.setPID(Kp, Ki, Kd, Ff);
-        frontLeft.setPID(Kp, Ki, Kd, Ff);
-        backRight.setPID(Kp, Ki, Kd, Ff);
-        frontRight.setPID(Kp, Ki, Kd, Ff);
-        backLeft.setPosition(pos);
-        frontLeft.setPosition(pos);
-        backRight.setPosition(pos);
-        frontRight.setPosition(pos);
+    public static void setPID(double Kp, double Ki, double Kd, double Ff){
+        driveRight.setPID(Kp, Ki, Kd, Ff);
+        driveLeft.setPID(Kp, Ki, Kd, Ff);
     }
 
-    public static void turnToAngle(double goal, double accepError, double debug){
-        double angle;
-        double error;
-        double input;
+    public static void setPosition(double pos){
+        driveLeft.setPosition(pos);
+        driveRight.setPosition(pos);
+    }
 
-        while(true){
-            angle = gyro.getAngle();
-            error = goal - angle;
-            input = OI.normalize(error/goal, -1.0, 1.0);
-
-            if(Math.abs(error) > accepError)
-                driveSpd(-input, input);
-            else {
-                driveSpd(0.0, 0.0);
-                break;
-            }
-        }
+    public static void setAngle(double angle){
+        driveLeft.setAngle(angle);
+        driveRight.setAngle(-angle);
     }
 }
