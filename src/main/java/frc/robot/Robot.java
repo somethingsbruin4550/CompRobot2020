@@ -88,7 +88,8 @@ public class Robot extends TimedRobot implements RobotMap, ControlMap {
   public void robotPeriodic() {
     if(printCount > 50)
     {
-      System.out.println("Angle: " + Chassis.getAngle());
+     // System.out.println("Angle: " + Chassis.getAngle());
+     System.out.println("Position: " + Chassis.getPos());
       printCount = 0;
     }
     printCount++;
@@ -108,8 +109,10 @@ public class Robot extends TimedRobot implements RobotMap, ControlMap {
   @Override
   public void autonomousInit() {
     Chassis.resetAll();
+    Chassis.setPositionConversionFactor(1/9.167);
 
-    Chassis.setPID(0, 0, 0, 0);
+    Chassis.setPID(0.5, 0, 0, 0);
+
     m_autoSelected = m_chooser.getSelected();
     // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
     System.out.println("Auto selected: " + m_autoSelected);
@@ -117,8 +120,8 @@ public class Robot extends TimedRobot implements RobotMap, ControlMap {
 
     switch (m_autoSelected) {
       case kCustomAuto:
-        Chassis.setPosition(5);
-        Chassis.setAngle(5);
+        Chassis.setDistance(10000);
+        //Chassis.setAngle(5);
         break;
       case kDefaultAuto:
         break;
@@ -137,6 +140,8 @@ public class Robot extends TimedRobot implements RobotMap, ControlMap {
   @Override
   public void autonomousPeriodic() {
     
+
+
   }
 
   @Override

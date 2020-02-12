@@ -30,21 +30,29 @@ public class ShiftDrive
         max2.setPID(Kp, Ki, Kd, Ff);
     }
 
+    public void setDistance(double dist){
+        max1.pidController.setReference(dist, ControlType.kPosition);
+        max2.pidController.setReference(dist, ControlType.kPosition);
+    }
+
     public void setPosition(double pos){
-        max1.pidController.setReference(pos, ControlType.kPosition);
-        max2.pidController.setReference(pos, ControlType.kPosition);
+        max1.encoder.setPosition(pos);
+        max2.encoder.setPosition(pos);
     }
 
-    public void setAngle(double angle){
-        max1.pidController.setReference(angle, ControlType.kPosition);
-        max2.pidController.setReference(angle, ControlType.kPosition);
+    public double getPosition(){
+        return (max1.encoder.getPosition() + max2.encoder.getPosition())/2;
     }
-
 
     public void setSpd(double spd)
     {
         max1.set(spd);
         max2.set(spd);
+    }
+
+    public void setPositionConversionFactor(double factor){
+        max1.setPositionConversionFactor(factor);
+        max1.setPositionConversionFactor(factor);
     }
 
 

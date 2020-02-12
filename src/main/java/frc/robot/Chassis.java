@@ -41,14 +41,14 @@ public class Chassis implements RobotMap{
         driveLeft.setPID(Kp, Ki, Kd, Ff);
     }
 
-    public static void setPosition(double pos){
-        driveLeft.setPosition(pos);
-        driveRight.setPosition(pos);
+    public static void setDistance(double dist){
+        driveLeft.setDistance(dist);
+        driveRight.setDistance(dist);
     }
 
-    public static void setAngle(double angle){
-        driveLeft.setAngle(angle);
-        driveRight.setAngle(-angle);
+    public static void setPositionConversionFactor(double factor){
+        driveLeft.setPositionConversionFactor(factor);
+        driveRight.setPositionConversionFactor(factor);
     }
 
     public static double getAngle()
@@ -56,8 +56,15 @@ public class Chassis implements RobotMap{
         return gyro.getAngle();
     }
 
+    public static double getPos()
+    {
+        return (driveRight.getPosition() + driveLeft.getPosition())/2;
+    }
+
     public static void resetAll()
     {
         gyro.reset();
+        driveLeft.setPosition(0);
+        driveRight.setPosition(0);
     }
 }
