@@ -18,15 +18,15 @@ package frc.parent;
 public interface RobotMap {
 
     // Wheel Talons
-    public static final int FORWARD_LEFT = -1;
-    public static final int FORWARD_RIGHT = -1;
-    public static final int BACK_LEFT = -1;
-    public static final int BACK_RIGHT = -1;
+    public static final int FORWARD_LEFT = 1;
+    public static final int BACK_LEFT = 2;
+    public static final int FORWARD_RIGHT = 3;
+    public static final int BACK_RIGHT = 4;
 
     // Wheel Talon Polarity
-    public static final boolean FL_REVERSE = false;
+    public static final boolean FL_REVERSE = true;
+    public static final boolean BL_REVERSE = true;
     public static final boolean FR_REVERSE = false;
-    public static final boolean BL_REVERSE = false;
     public static final boolean BR_REVERSE = false;
 
     // Wheel Encoder Ports
@@ -40,15 +40,17 @@ public interface RobotMap {
     public static final int POTENTIOMETER = -1; 
     public static final int PCM_CAN = -1; 
     public static final int PCM_SOLENOID = -1; 
-    // Talon Ports for Intake
+    // Motor Ports for Intake
     public static final int INTAKE_A = -1;
     public static final int INTAKE_B = -1;
 
-    // Talon ports for Climber
+    // Motor ports for Climber
     public static final int CLIMBER = -1;
 
-    // Talon ports for the yeeter
+    // Motor ports for the yeeter
     public static final int YEETER_ONE = -1;
     public static final int YEETER_TWO = -1;
+
+    public static final int TURRET = -1;
 
 }

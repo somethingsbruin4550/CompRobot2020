@@ -25,7 +25,7 @@ public class Turret implements RobotMap{
     private CCSparkMax max;
 
     public Turret(){//int chanOne, MotorType type, IdleMode idle, boolean rOne){
-        max = new CCSparkMax(1, MotorType.kBrushed, IdleMode.kBrake, true);
+        max = new CCSparkMax(RobotMap.TURRET, MotorType.kBrushed, IdleMode.kBrake, true);
     }
 
     public void set(double spd){

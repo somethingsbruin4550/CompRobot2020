@@ -61,4 +61,10 @@ public class ShiftDrive
             shift2.set(false);
         }
     }
+
+    public void disableAll()
+    {
+        max1.disable();
+        max2.disable();
+    }
 }

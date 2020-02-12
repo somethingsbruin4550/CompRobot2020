@@ -14,6 +14,10 @@ import frc.robot.sensors.*;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+import com.revrobotics.CANSparkMax.IdleMode;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
 import edu.wpi.first.wpilibj.DriverStation;
 
 /**
@@ -23,15 +27,22 @@ import edu.wpi.first.wpilibj.DriverStation;
  * creating this project, you must also update the build.gradle file in the
  * project.
  */
-public class Robot extends TimedRobot implements RobotMap, ControMap {
+public class Robot extends TimedRobot implements RobotMap, ControlMap {
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
   private static final String kResetPIDs = "Reset PIDs";
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
+  // private CCSparkMax fly = new CCSparkMax(2, MotorType.kBrushless, IdleMode.kBrake, false);
+  // private CCSparkMax turret = new CCSparkMax(1, MotorType.kBrushless, IdleMode.kBrake, false);
+  // private Turret turret = new Turret();
+
 
   int alliance;
   double spdmlt = 1;
+
+
+  int printCount;
 
   /**
    * This function is run when the robot is first started up and should be
@@ -46,6 +57,9 @@ public class Robot extends TimedRobot implements RobotMap, ControMap {
     SmartDashboard.putData("Auto choices", m_chooser);
     
     LemonLight.setLightChannel(9);
+
+
+    printCount = 0;
   
     switch(DriverStation.getInstance().getAlliance()){
       case Blue:
@@ -72,6 +86,12 @@ public class Robot extends TimedRobot implements RobotMap, ControMap {
    */
   @Override
   public void robotPeriodic() {
+    if(printCount > 50)
+    {
+      System.out.println("Angle: " + Chassis.getAngle());
+      printCount = 0;
+    }
+    printCount++;
   }
 
   /**
@@ -87,6 +107,8 @@ public class Robot extends TimedRobot implements RobotMap, ControMap {
    */
   @Override
   public void autonomousInit() {
+    Chassis.resetAll();
+
     Chassis.setPID(0, 0, 0, 0);
     m_autoSelected = m_chooser.getSelected();
     // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
@@ -119,6 +141,7 @@ public class Robot extends TimedRobot implements RobotMap, ControMap {
 
   @Override
   public void teleopInit() {
+    Chassis.resetAll();
     LemonLight.setLight(true);
   }
 
@@ -128,11 +151,17 @@ public class Robot extends TimedRobot implements RobotMap, ControMap {
   @Override
   public void teleopPeriodic() {
     Chassis.drive();
-    Chassis.driveAxis(OI.axis(PilotMap.Y_AXIS), OI.axis(PilotMap.X_AXIS));      
+    Chassis.driveAxis(OI.normalize(OI.axis(PilotMap.Y_AXIS), -1.0, 1.0, 0.05), 
+      OI.normalize(OI.axis(PilotMap.X_AXIS), -1.0, 1.0, 0.05));
+    // turret.set(OI.normalize(OI.axis(PilotMap.), -1.0, 1.0));
+    // System.out.println(OI.normalize(OI.axis(ControlMap.R_JOYSTICK_HORIZONTAL), -1.0, 1.0));
+    // fly.set(OI.normalize(OI.axis(ControlMap.L_JOYSTICK_VERTICAL), -1.0, 1.0));
    }
 
   @Override
   public void disabledInit() {
+    Chassis.driveLeft.disableAll();
+    Chassis.driveRight.disableAll();
    LemonLight.setLight(false);
   }
 
@@ -143,5 +172,10 @@ public class Robot extends TimedRobot implements RobotMap, ControMap {
   public void testPeriodic() {
     LemonLight.setLight(true);
 
+  }
+
+  private void enabledInit()
+  {
+    Chassis.resetAll();
   }
 }
