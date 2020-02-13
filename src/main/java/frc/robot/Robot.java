@@ -109,8 +109,7 @@ public class Robot extends TimedRobot implements RobotMap, ControlMap {
   @Override
   public void autonomousInit() {
     Chassis.resetAll();
-    Chassis.setPositionConversionFactor(1/9.167);
-
+    //Chassis.setPositionConversionFactor(1/9.167);
     Chassis.setPID(0.5, 0, 0, 0);
 
     m_autoSelected = m_chooser.getSelected();
@@ -120,7 +119,7 @@ public class Robot extends TimedRobot implements RobotMap, ControlMap {
 
     switch (m_autoSelected) {
       case kCustomAuto:
-        Chassis.setDistance(10000);
+        Chassis.setDistance(100);
         //Chassis.setAngle(5);
         break;
       case kDefaultAuto:

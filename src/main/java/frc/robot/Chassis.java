@@ -58,7 +58,7 @@ public class Chassis implements RobotMap{
 
     public static double getPos()
     {
-        return (driveRight.getPosition() + driveLeft.getPosition())/2;
+        return driveRight.getPosition();
     }
 
     public static void resetAll()
