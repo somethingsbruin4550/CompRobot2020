@@ -50,6 +50,7 @@ public class Robot extends TimedRobot implements RobotMap, ControlMap {
    */
   @Override
   public void robotInit() {
+    resetAll();
     
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
@@ -86,10 +87,10 @@ public class Robot extends TimedRobot implements RobotMap, ControlMap {
    */
   @Override
   public void robotPeriodic() {
-    if(printCount > 50)
+    if(printCount > 20)
     {
      // System.out.println("Angle: " + Chassis.getAngle());
-     System.out.println("Position: " + Chassis.getPos());
+     System.out.println("Position: " + Chassis.driveLeft.getPosition());
       printCount = 0;
     }
     printCount++;
@@ -109,7 +110,9 @@ public class Robot extends TimedRobot implements RobotMap, ControlMap {
   @Override
   public void autonomousInit() {
     Chassis.resetAll();
-    //Chassis.setPositionConversionFactor(1/9.167);
+    // Chassis.setPositionConversionFactor(1.0/9.166666666);
+    Chassis.setPositionConversionFactor(1.0/20.8333333333);
+    // Chassis.setPositionConversionFactor(1.0);
     Chassis.setPID(0.5, 0, 0, 0);
 
     m_autoSelected = m_chooser.getSelected();
@@ -119,7 +122,7 @@ public class Robot extends TimedRobot implements RobotMap, ControlMap {
 
     switch (m_autoSelected) {
       case kCustomAuto:
-        Chassis.setDistance(100);
+        Chassis.setDistance(8.0 * 12.0);
         //Chassis.setAngle(5);
         break;
       case kDefaultAuto:
@@ -178,7 +181,7 @@ public class Robot extends TimedRobot implements RobotMap, ControlMap {
 
   }
 
-  private void enabledInit()
+  private void resetAll()
   {
     Chassis.resetAll();
   }

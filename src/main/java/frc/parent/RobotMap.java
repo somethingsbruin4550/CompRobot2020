@@ -53,4 +53,6 @@ public interface RobotMap {
 
     public static final int TURRET = -1;
 
+    public static final double WHEEL_CIRC = 7.25 * Math.PI;
+
 }

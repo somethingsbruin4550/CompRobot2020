@@ -52,7 +52,7 @@ public class ShiftDrive
 
     public void setPositionConversionFactor(double factor){
         max1.setPositionConversionFactor(factor);
-        max1.setPositionConversionFactor(factor);
+        max2.setPositionConversionFactor(factor);
     }
 
 
@@ -74,5 +74,11 @@ public class ShiftDrive
     {
         max1.disable();
         max2.disable();
+    }
+
+    public void setMaxSpd(double spd)
+    {
+        max1.pidController.setOutputRange(-spd, spd);
+        max2.pidController.setOutputRange(-spd, spd);
     }
 }

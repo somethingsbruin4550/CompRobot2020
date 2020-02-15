@@ -41,9 +41,15 @@ public class Chassis implements RobotMap{
         driveLeft.setPID(Kp, Ki, Kd, Ff);
     }
 
+    /**
+     * Sets the target motor position
+     * @param dist The distance in inches
+     */
     public static void setDistance(double dist){
-        driveLeft.setDistance(dist);
-        driveRight.setDistance(dist);
+        driveLeft.setMaxSpd(0.3);
+        driveRight.setMaxSpd(0.3);
+        driveLeft.setDistance(-dist/RobotMap.WHEEL_CIRC);
+        driveRight.setDistance(-dist/RobotMap.WHEEL_CIRC);
     }
 
     public static void setPositionConversionFactor(double factor){
@@ -58,7 +64,7 @@ public class Chassis implements RobotMap{
 
     public static double getPos()
     {
-        return driveRight.getPosition();
+        return -(driveRight.getPosition() + driveLeft.getPosition())/2;
     }
 
     public static void resetAll()
