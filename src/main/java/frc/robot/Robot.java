@@ -167,7 +167,7 @@ public class Robot extends TimedRobot implements RobotMap, ControlMap {
   public void teleopPeriodic() {
     //Basic Driving
     Chassis.driveAxis(OI.axis(1, PilotMap.Y_AXIS), OI.axis(2, PilotMap.X_AXIS));
-
+    Chassis.drive();
     //Shifting Gearbox Control
     Chassis.setFastMode(OI.button(2, PilotMap.TRIGGER));
 

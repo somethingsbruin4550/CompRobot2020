@@ -30,9 +30,10 @@ public interface RobotMap {
     public static final boolean SPINDEXER_REVERSE = false;
 
     // Motor ports for the yeeter
-    public static final int SHOOTER_ONE = -1;
-    public static final int SHOOTER_TWO = -1;
-    public static final boolean SHOOTER_REVERSE = false;
+    public static final int SHOOTER_ONE = 9;
+    public static final int SHOOTER_TWO = 10;
+    public static final boolean SHOOTER_ONE_REVERSE = false;
+    public static final boolean SHOOTER_TWO_REVERSE = false;
 
     public static final int TURRET = 5;
     public static final boolean TURRET_REVERSE = false;

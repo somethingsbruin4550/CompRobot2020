@@ -11,7 +11,7 @@ import frc.parent.*;
 public class Loader implements RobotMap
 {
     public static CCSparkMax spinMax = new CCSparkMax(RobotMap.SPINDEXER, MotorType.kBrushless, IdleMode.kBrake, RobotMap.SPINDEXER_REVERSE);
-    public static CCSparkMax loaderMax = new CCSparkMax(RobotMap.LOADER, MotorType.kBrushless, IdleMode.kBrake, RobotMap.LOADER_REVERSE);
+    public static CCSparkMax loaderMax = new CCSparkMax(RobotMap.LOADER, MotorType.kBrushed, IdleMode.kBrake, RobotMap.LOADER_REVERSE);
 
     public static void setSpinSpd(double spd)
     {
