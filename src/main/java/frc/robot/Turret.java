@@ -22,40 +22,28 @@ public class Turret implements RobotMap{
 
     // public CANEncoder encoder = new CANEncoder(super.tOne);
     // public AnalogPotentiometer potent = new AnalogPotentiometer(RobotMap.POTENTIOMETER);
-    private CCSparkMax max;
+    private static CCSparkMax max = new CCSparkMax(RobotMap.TURRET, MotorType.kBrushless, IdleMode.kBrake, RobotMap.TURRET_REVERSE);
 
-    public Turret(){//int chanOne, MotorType type, IdleMode idle, boolean rOne){
-        max = new CCSparkMax(RobotMap.TURRET, MotorType.kBrushed, IdleMode.kBrake, true);
-    }
-
-    public void set(double spd){
+    public static void set(double spd){
         max.set(spd);
     }
 
-    public void setConst(double Kp, double Ki, double Kd, double Ff){
+    public static void setConst(double Kp, double Ki, double Kd, double Ff){
         max.setPID(Kp, Ki, Kd, Ff);
     } 
 
-    public void lockOn(){
-        double x = LemonLight.getYaw();
-        double error = Math.abs(x-0);
-        double input = OI.normalize((error*5)/100, 0.2, 0.6);
-        boolean exists = LemonLight.hasTarget();
-        
-        if(exists){
-            if(x > 2.0){
-                // input = input;
-            } else if(x < 2.0){
-                input = -input;
-            } else{
-                input = 0; 
-            }
-        } else {
-            input = 0; 
+    public static void lockOn(){
+        if(LemonLight.hasTarget())
+        {
+            double outYaw = OI.normalize(LemonLight.getYaw(), -RobotMap.TURRET_SPD, RobotMap.TURRET_SPD, RobotMap.TURRET_THRESHOLD);
+            System.out.println(outYaw);
+            set(outYaw);
         }
-
-        set(input);
-
+        else
+        {
+            System.out.println("No Target");
+            set(0.0);
+        }
     }
 
 }

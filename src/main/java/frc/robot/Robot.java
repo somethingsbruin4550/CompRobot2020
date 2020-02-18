@@ -15,8 +15,8 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-import com.revrobotics.CANSparkMax.IdleMode;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+// import com.revrobotics.CANSparkMax.IdleMode;
+// import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DriverStation;
 
@@ -57,7 +57,7 @@ public class Robot extends TimedRobot implements RobotMap, ControlMap {
     m_chooser.addOption("Reset PID Values", kResetPIDs);
     SmartDashboard.putData("Auto choices", m_chooser);
     
-    LemonLight.setLightChannel(9);
+    LemonLight.setLightChannel(0);
 
 
     printCount = 0;
@@ -90,7 +90,8 @@ public class Robot extends TimedRobot implements RobotMap, ControlMap {
     if(printCount > 20)
     {
      // System.out.println("Angle: " + Chassis.getAngle());
-     System.out.println("Position: " + Chassis.driveLeft.getPosition());
+    //  System.out.println("Position: " + Chassis.driveLeft.getPosition());
+      // System.out.println(LemonLight.getYaw());
       printCount = 0;
     }
     printCount++;
@@ -122,7 +123,7 @@ public class Robot extends TimedRobot implements RobotMap, ControlMap {
 
     switch (m_autoSelected) {
       case kCustomAuto:
-        Chassis.setDistance(8.0 * 12.0);
+        // Chassis.setDistance(8.0 * 12.0);
         //Chassis.setAngle(5);
         break;
       case kDefaultAuto:
@@ -157,9 +158,17 @@ public class Robot extends TimedRobot implements RobotMap, ControlMap {
    */
   @Override
   public void teleopPeriodic() {
-    Chassis.drive();
-    Chassis.driveAxis(OI.normalize(OI.axis(PilotMap.Y_AXIS), -1.0, 1.0, 0.05), 
-      OI.normalize(OI.axis(PilotMap.X_AXIS), -1.0, 1.0, 0.05));
+    // Chassis.drive();
+    // Chassis.driveAxis(OI.normalize(OI.axis(PilotMap.Y_AXIS), -1.0, 1.0, 0.05), 
+    //   OI.normalize(OI.axis(PilotMap.X_AXIS), -1.0, 1.0, 0.05));
+    if(OI.button(PilotMap.TRIGGER))
+    {
+      Turret.lockOn();
+    }
+    else
+    {
+      Turret.set(OI.normalize(OI.axis(PilotMap.X_AXIS), -0.15, 0.15, 0.07));
+    }
     // turret.set(OI.normalize(OI.axis(PilotMap.), -1.0, 1.0));
     // System.out.println(OI.normalize(OI.axis(ControlMap.R_JOYSTICK_HORIZONTAL), -1.0, 1.0));
     // fly.set(OI.normalize(OI.axis(ControlMap.L_JOYSTICK_VERTICAL), -1.0, 1.0));

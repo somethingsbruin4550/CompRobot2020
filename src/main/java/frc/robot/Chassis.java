@@ -2,8 +2,8 @@ package frc.robot;
 
 import frc.parent.*;
 
-// import com.revrobotics.CANSparkMax.IdleMode;
-// import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.CANSparkMax.IdleMode;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 //import edu.wpi.first.wpilibj.Encoder;
 import com.kauailabs.navx.frc.AHRS;
@@ -14,8 +14,9 @@ public class Chassis implements RobotMap{
 
     public static AHRS gyro = new AHRS(SPI.Port.kMXP);
 
-    public static ShiftDrive driveRight = new ShiftDrive(RobotMap.FORWARD_RIGHT, RobotMap.BACK_RIGHT, RobotMap.FR_REVERSE, RobotMap.BR_REVERSE, 0, 1);
-    public static ShiftDrive driveLeft = new ShiftDrive(RobotMap.FORWARD_LEFT,RobotMap.BACK_LEFT, RobotMap.FL_REVERSE, RobotMap.BL_REVERSE, 2, 3 ); 
+    // public static ShiftDrive driveRight = new ShiftDrive(RobotMap.FORWARD_RIGHT, RobotMap.BACK_RIGHT, RobotMap.FR_REVERSE, RobotMap.BR_REVERSE, 0, 1);
+    // public static ShiftDrive driveLeft = new ShiftDrive(RobotMap.FORWARD_LEFT,RobotMap.BACK_LEFT, RobotMap.FL_REVERSE, RobotMap.BL_REVERSE, 2, 3 ); 
+    public static CCSparkMax FRMax = new CCSparkMax(RobotMap.FORWARD_RIGHT, MotorType.kBrushless, IdleMode.kBrake, RobotMap.FR_REVERSE);
 
     public static double leftSpd = 0;
     public static double rightSpd = 0; 

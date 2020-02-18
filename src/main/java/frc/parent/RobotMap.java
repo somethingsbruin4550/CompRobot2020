@@ -18,15 +18,13 @@ package frc.parent;
 public interface RobotMap {
 
     // Wheel Talons
-    public static final int FORWARD_LEFT = 1;
-    public static final int BACK_LEFT = 2;
-    public static final int FORWARD_RIGHT = 3;
-    public static final int BACK_RIGHT = 4;
-
-    // Wheel Talon Polarity
+    public static final int FORWARD_LEFT = -1;
     public static final boolean FL_REVERSE = true;
+    public static final int BACK_LEFT = -1;
     public static final boolean BL_REVERSE = true;
+    public static final int FORWARD_RIGHT = -1;
     public static final boolean FR_REVERSE = false;
+    public static final int BACK_RIGHT = -1;
     public static final boolean BR_REVERSE = false;
 
     // Wheel Encoder Ports
@@ -51,7 +49,10 @@ public interface RobotMap {
     public static final int YEETER_ONE = -1;
     public static final int YEETER_TWO = -1;
 
-    public static final int TURRET = -1;
+    public static final int TURRET = 2;
+    public static final boolean TURRET_REVERSE = true;
+    public static final double TURRET_SPD = 0.25;
+    public static final double TURRET_THRESHOLD = 5.0;
 
     public static final double WHEEL_CIRC = 7.25 * Math.PI;
 
