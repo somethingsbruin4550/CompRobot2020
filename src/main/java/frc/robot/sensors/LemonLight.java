@@ -5,6 +5,9 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.DigitalOutput;
 
+/**
+ * The interface for our ChameleonVison and Raspberry Pi Vision system
+ */
 public class LemonLight{
     public static NetworkTableInstance table = NetworkTableInstance.getDefault();
     public static NetworkTable cam = table.getTable("chameleon-vision").getSubTable("USB Camera-B4.09.24.1");

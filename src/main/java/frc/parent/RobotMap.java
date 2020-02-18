@@ -1,58 +1,43 @@
 package frc.parent;
 
-/*
-    RobotMap holds all the ports involved in the robot.
-    This ranges from talon ports, all the way to the ports
-    on the controllers. This also contains the polarity for the wheels
-    and the various ports assoiated with sensors
-
-    If you wish to create your own port, here is the syntax:
-        public static final returnType name = value;
-    Notes on creating ports:
-        1. Ports must be integers or booleans
-        2. they MUST be public static final;
-        3. If the port is not plugged in, make int values -1, and boolean values false
-
-
-*/
 public interface RobotMap {
 
+    public static final int NUM_JOYSTICKS = 3;
+
     // Wheel Talons
-    public static final int FORWARD_LEFT = -1;
+    public static final int FORWARD_LEFT = 1;
     public static final boolean FL_REVERSE = true;
-    public static final int BACK_LEFT = -1;
+    public static final int BACK_LEFT = 2;
     public static final boolean BL_REVERSE = true;
-    public static final int FORWARD_RIGHT = -1;
+    public static final int FORWARD_RIGHT = 3;
     public static final boolean FR_REVERSE = false;
-    public static final int BACK_RIGHT = -1;
+    public static final int BACK_RIGHT = 4;
     public static final boolean BR_REVERSE = false;
 
-    // Wheel Encoder Ports
-    public static final int ENCODER_A_LEFT = -1;
-    public static final int ENCODER_B_LEFT = -1; 
-    public static final int ENCODER_A_RIGHT = -1;
-    public static final int ENCODER_B_RIGHT = -1; 
-    public static final int ENCODER_TURRET = -1;
-    
-    //Other
-    public static final int POTENTIOMETER = -1; 
-    public static final int PCM_CAN = -1; 
-    public static final int PCM_SOLENOID = -1; 
+    public static final int SHIFT_SOLENOID = 0;
+
     // Motor Ports for Intake
-    public static final int INTAKE_A = -1;
-    public static final int INTAKE_B = -1;
+    public static final int INTAKE = 8;
+    public static final boolean INTAKE_REVERSE = false;
+    public static final int INTAKE_SOLENDOID = 1;
 
     // Motor ports for Climber
-    public static final int CLIMBER = -1;
+    // public static final int CLIMBER = -1;
+
+    public static final int LOADER = 6;
+    public static final boolean LOADER_REVERSE = false;
+    public static final int SPINDEXER = 7;
+    public static final boolean SPINDEXER_REVERSE = false;
 
     // Motor ports for the yeeter
-    public static final int YEETER_ONE = -1;
-    public static final int YEETER_TWO = -1;
+    public static final int SHOOTER_ONE = -1;
+    public static final int SHOOTER_TWO = -1;
+    public static final boolean SHOOTER_REVERSE = false;
 
-    public static final int TURRET = 2;
-    public static final boolean TURRET_REVERSE = true;
+    public static final int TURRET = 5;
+    public static final boolean TURRET_REVERSE = false;
     public static final double TURRET_SPD = 0.25;
-    public static final double TURRET_THRESHOLD = 5.0;
+    public static final double TURRET_TARGETING_THRESHOLD = 5.0;
 
     public static final double WHEEL_CIRC = 7.25 * Math.PI;
 

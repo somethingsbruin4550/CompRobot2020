@@ -8,6 +8,9 @@ import com.revrobotics.ControlType;
 
 //Documention: http://www.revrobotics.com/content/sw/max/sw-docs/java/com/revrobotics/CANSparkMax.html#%3Cinit%3E(int,com.revrobotics.CANSparkMaxLowLevel.MotorType)
 
+/**
+ * Compacts all methods needed to drive a SparkMax and Neo into one class
+ */
 public class CCSparkMax extends CANSparkMax{
 
     CANPIDController pidController;
@@ -38,7 +41,7 @@ public class CCSparkMax extends CANSparkMax{
      * Sets the speed of the motor controller
      * @param speed The speed that will be set (-1.0 to 1.0)
      */
-    public void set(double speed){
+    public void setSpd(double speed){
         super.set(speed);
     }
 
@@ -66,8 +69,8 @@ public class CCSparkMax extends CANSparkMax{
      * Sets the position(in encoder tics) of the neo
      * @param ref Position in encoder tics
      */
-    public void setDistance(double dist){
-        pidController.setReference(dist, ControlType.kPosition);
+    public void setDistance(double dist, ControlType controlType){
+        pidController.setReference(dist, controlType);
     }
 
     /**
@@ -100,5 +103,13 @@ public class CCSparkMax extends CANSparkMax{
         pidController.setFF(Ff);
     }
 
-    
+    /**
+     * Caps the speed of the motors
+     * @param minSpd The minimum speed
+     * @param maxSpd The maximum speed
+     */
+    public void setMaxSpd(double minSpd, double maxSpd)
+    {
+        pidController.setOutputRange(minSpd, maxSpd);
+    }
 }

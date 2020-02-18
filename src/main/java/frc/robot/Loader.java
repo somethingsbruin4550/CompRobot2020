@@ -1,35 +1,25 @@
+package frc.robot;
+
+import com.revrobotics.CANSparkMax.IdleMode;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
+import frc.parent.*;
+
 /**
- * String state = "init";
- * 
- * if(loading){
- *  state = "loading"
- * } else if(shooting){`    
- *  state = "shooting"
- * } else if(init){
- *  state = "init"
- * }
- * 
- * 
- * stateController(){
- *  if(state.equals("loading"))
- *      stateLoading()
- *  else if(state.equals("shooting"))
- *      stateShooting()
- *  else if(state.equals("init"))
- *      stateInit()
- * }
- * 
- * 
- * stateLoading(){
- *  findEmpty();
- * }
- * 
- * stateShooting(){
- *  findBall();
- * }
- * 
- * stateInit(){
- *  rotate();
- * }
- * 
+ * The magazine ("Spindexer") of the robot and the loader wheel
  */
+public class Loader implements RobotMap
+{
+    public static CCSparkMax spinMax = new CCSparkMax(RobotMap.SPINDEXER, MotorType.kBrushless, IdleMode.kBrake, RobotMap.SPINDEXER_REVERSE);
+    public static CCSparkMax loaderMax = new CCSparkMax(RobotMap.LOADER, MotorType.kBrushless, IdleMode.kBrake, RobotMap.LOADER_REVERSE);
+
+    public static void setSpinSpd(double spd)
+    {
+        spinMax.setSpd(spd);
+    }
+
+    public static void setLoaderSpd(double spd)
+    {
+        loaderMax.setSpd(spd);
+    }
+}

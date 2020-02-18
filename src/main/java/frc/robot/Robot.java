@@ -15,6 +15,8 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+// import java.util.ResourceBundle.Control;
+
 // import com.revrobotics.CANSparkMax.IdleMode;
 // import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -30,6 +32,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 public class Robot extends TimedRobot implements RobotMap, ControlMap {
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
+  private static final String kCrossLine = "Cross Line";
   private static final String kResetPIDs = "Reset PIDs";
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
@@ -37,6 +40,7 @@ public class Robot extends TimedRobot implements RobotMap, ControlMap {
   // private CCSparkMax turret = new CCSparkMax(1, MotorType.kBrushless, IdleMode.kBrake, false);
   // private Turret turret = new Turret();
 
+  ReleasableButton yButton;
 
   int alliance;
   double spdmlt = 1;
@@ -54,6 +58,7 @@ public class Robot extends TimedRobot implements RobotMap, ControlMap {
     
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
+    m_chooser.addOption("Cross Line", kCrossLine);
     m_chooser.addOption("Reset PID Values", kResetPIDs);
     SmartDashboard.putData("Auto choices", m_chooser);
     
@@ -111,9 +116,6 @@ public class Robot extends TimedRobot implements RobotMap, ControlMap {
   @Override
   public void autonomousInit() {
     Chassis.resetAll();
-    // Chassis.setPositionConversionFactor(1.0/9.166666666);
-    Chassis.setPositionConversionFactor(1.0/20.8333333333);
-    // Chassis.setPositionConversionFactor(1.0);
     Chassis.setPID(0.5, 0, 0, 0);
 
     m_autoSelected = m_chooser.getSelected();
@@ -123,8 +125,11 @@ public class Robot extends TimedRobot implements RobotMap, ControlMap {
 
     switch (m_autoSelected) {
       case kCustomAuto:
-        // Chassis.setDistance(8.0 * 12.0);
+        // Chassis.setDistance(8.0 * 12.0, 0.5);
         //Chassis.setAngle(5);
+        break;
+      case kCrossLine:
+        Chassis.setDistance(3.5 * 12.0, 0.3);
         break;
       case kDefaultAuto:
         break;
@@ -151,6 +156,8 @@ public class Robot extends TimedRobot implements RobotMap, ControlMap {
   public void teleopInit() {
     Chassis.resetAll();
     LemonLight.setLight(true);
+
+    OI.initJoysticks();
   }
 
   /**
@@ -158,26 +165,42 @@ public class Robot extends TimedRobot implements RobotMap, ControlMap {
    */
   @Override
   public void teleopPeriodic() {
-    // Chassis.drive();
-    // Chassis.driveAxis(OI.normalize(OI.axis(PilotMap.Y_AXIS), -1.0, 1.0, 0.05), 
-    //   OI.normalize(OI.axis(PilotMap.X_AXIS), -1.0, 1.0, 0.05));
-    if(OI.button(PilotMap.TRIGGER))
+    //Basic Driving
+    Chassis.driveAxis(OI.axis(1, PilotMap.Y_AXIS), OI.axis(2, PilotMap.X_AXIS));
+
+    //Shifting Gearbox Control
+    Chassis.setFastMode(OI.button(2, PilotMap.TRIGGER));
+
+    //Extends Intake, if extended, spin
+    Intake.setExtended(yButton.updateButton(OI.button(3, ControlMap.Y_BUTTON), 0.5));
+    if(yButton.getStatus() && OI.button(3, ControlMap.A_BUTTON))
+    {
+      Intake.setSpd(OI.normalize(1.0, -0.5, 0.5, 0.15));
+    }
+    else
+    {
+      Intake.setSpd(0.0);
+    }
+
+    Turret.setShooter(OI.normalize(ControlMap.RT, 0, 1.0, 0.1));
+    if(OI.normalize(ControlMap.RT, 0, 1.0, 0.1) > 0.0)
+    {
+      Loader.setLoaderSpd(1.0);
+    }
+
+    if(OI.axis(3, ControlMap.LT) > 0.3)
     {
       Turret.lockOn();
     }
     else
     {
-      Turret.set(OI.normalize(OI.axis(PilotMap.X_AXIS), -0.15, 0.15, 0.07));
+      Turret.setSpin(OI.normalize(OI.axis(3, ControlMap.L_JOYSTICK_HORIZONTAL), -0.5, 0.5, 0.1));
     }
-    // turret.set(OI.normalize(OI.axis(PilotMap.), -1.0, 1.0));
-    // System.out.println(OI.normalize(OI.axis(ControlMap.R_JOYSTICK_HORIZONTAL), -1.0, 1.0));
-    // fly.set(OI.normalize(OI.axis(ControlMap.L_JOYSTICK_VERTICAL), -1.0, 1.0));
-   }
+  }
 
   @Override
   public void disabledInit() {
-    Chassis.driveLeft.disableAll();
-    Chassis.driveRight.disableAll();
+    Chassis.disableAll();
    LemonLight.setLight(false);
   }
 

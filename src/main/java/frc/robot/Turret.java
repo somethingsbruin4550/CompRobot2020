@@ -18,31 +18,40 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 // import com.revrobotics.CANEncoder;
 
+/**
+ * Implements the shooter and turret mechanisms
+ */
 public class Turret implements RobotMap{
-
-    // public CANEncoder encoder = new CANEncoder(super.tOne);
     // public AnalogPotentiometer potent = new AnalogPotentiometer(RobotMap.POTENTIOMETER);
-    private static CCSparkMax max = new CCSparkMax(RobotMap.TURRET, MotorType.kBrushless, IdleMode.kBrake, RobotMap.TURRET_REVERSE);
+    private static CCSparkMax maxTurret = new CCSparkMax(RobotMap.TURRET, MotorType.kBrushless, IdleMode.kBrake, RobotMap.TURRET_REVERSE);
+    private static CCSparkMax maxShooter1 = new CCSparkMax(RobotMap.SHOOTER_ONE, MotorType.kBrushless, IdleMode.kBrake, RobotMap.SHOOTER_REVERSE);
+    private static CCSparkMax maxShooter2 = new CCSparkMax(RobotMap.SHOOTER_TWO, MotorType.kBrushless, IdleMode.kBrake, RobotMap.SHOOTER_REVERSE);
 
-    public static void set(double spd){
-        max.set(spd);
+    public static void setSpin(double spd){
+        maxTurret.setSpd(spd);
+    }
+
+    public static void setShooter(double spd)
+    {
+        maxShooter1.setSpd(spd);
+        maxShooter2.setSpd(-spd);
     }
 
     public static void setConst(double Kp, double Ki, double Kd, double Ff){
-        max.setPID(Kp, Ki, Kd, Ff);
+        maxTurret.setPID(Kp, Ki, Kd, Ff);
     } 
 
     public static void lockOn(){
         if(LemonLight.hasTarget())
         {
-            double outYaw = OI.normalize(LemonLight.getYaw(), -RobotMap.TURRET_SPD, RobotMap.TURRET_SPD, RobotMap.TURRET_THRESHOLD);
+            double outYaw = OI.normalize(LemonLight.getYaw(), -RobotMap.TURRET_SPD, RobotMap.TURRET_SPD, RobotMap.TURRET_TARGETING_THRESHOLD);
             System.out.println(outYaw);
-            set(outYaw);
+            setSpin(outYaw);
         }
         else
         {
             System.out.println("No Target");
-            set(0.0);
+            setSpin(0.0);
         }
     }
 
