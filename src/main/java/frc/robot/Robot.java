@@ -183,19 +183,19 @@ public class Robot extends TimedRobot implements RobotMap, ControlMap {
     }
 
     Turret.setShooter(OI.normalize(ControlMap.RT, 0, 1.0, 0.1));
-    if(OI.normalize(ControlMap.RT, 0, 1.0, 0.1) > 0.0)
+    if(OI.normalize(OI.axis(3,ControlMap.RT), 0, 1.0, 0.1) > 0.0)
     {
       Loader.setLoaderSpd(1.0);
     }
 
     if(OI.axis(3, ControlMap.LT) > 0.3)
-    {
+    { 
       Turret.lockOn();
     }
     else
     {
       Turret.setSpin(OI.normalize(OI.axis(3, ControlMap.L_JOYSTICK_HORIZONTAL), -0.5, 0.5, 0.1));
-    }
+    0}
   }
 
   @Override
