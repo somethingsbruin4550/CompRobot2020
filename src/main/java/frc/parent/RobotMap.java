@@ -36,7 +36,7 @@ public interface RobotMap {
     public static final boolean SHOOTER_TWO_REVERSE = false;
 
     public static final int TURRET = 5;
-    public static final boolean TURRET_REVERSE = false;
+    public static final boolean TURRET_REVERSE = true;
     public static final double TURRET_SPD = 0.25;
     public static final double TURRET_TARGETING_THRESHOLD = 5.0;
 

@@ -26,15 +26,17 @@ public class CCSparkMax extends CANSparkMax{
      */
     public CCSparkMax(int deviceID, MotorType controlMode, IdleMode idleMode, boolean reverse){
         super(deviceID, controlMode);
+        pidController = super.getPIDController();
+        encoder = super.getEncoder();
 
+        if(controlMode == MotorType.kBrushed)
+        {
+            
+        }
         if(super.setIdleMode(idleMode) != CANError.kOk){
             System.out.println("Spark Max Idle Mode Not Set");
         }
         super.setInverted(reverse);
-        
-
-        pidController = super.getPIDController();
-        encoder = super.getEncoder();
     }
 
     /**

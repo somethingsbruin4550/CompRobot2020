@@ -147,9 +147,7 @@ public class Robot extends TimedRobot implements RobotMap, ControlMap {
    */
   @Override
   public void autonomousPeriodic() {
-    
-
-
+    Turret.setShooter(OI.normalize(0.5, -1, 1));
   }
 
   @Override
@@ -165,38 +163,53 @@ public class Robot extends TimedRobot implements RobotMap, ControlMap {
    */
   @Override
   public void teleopPeriodic() {
-    //Basic Driving
-    Chassis.driveAxis(OI.axis(1, PilotMap.Y_AXIS), OI.axis(2, PilotMap.X_AXIS));
-    Chassis.drive();
-    //Shifting Gearbox Control
-    Chassis.setFastMode(OI.button(2, PilotMap.TRIGGER));
+    // //Basic Driving
+    // Chassis.driveAxis(OI.axis(0, PilotMap.Y_AXIS), OI.axis(1, PilotMap.X_AXIS));
+    // Chassis.drive();
+    // //Shifting Gearbox Control
+    // Chassis.setFastMode(OI.button(1, PilotMap.TRIGGER));
 
     //Extends Intake, if extended, spin
-    Intake.setExtended(yButton.updateButton(OI.button(3, ControlMap.Y_BUTTON), 0.5));
-    if(yButton.getStatus() && OI.button(3, ControlMap.A_BUTTON))
+   // Intake.setExtended(yButton.updateButton(OI.button(2, ControlMap.Y_BUTTON), 0.5));
+
+   if(OI.axis(2, ControlMap.RT) > 0.05)
+   {
+     Loader.setLoaderSpd(1.0);
+   }
+
+
+    if(OI.button(2, ControlMap.A_BUTTON))
     {
-      Intake.setSpd(OI.normalize(1.0, -0.5, 0.5, 0.15));
+      Intake.setSpd(0.5);
+     // Loader.setSpinSpd(0.3);
     }
     else
     {
-      Intake.setSpd(0.0);
+      Intake.setSpd(0);
     }
 
-    Turret.setShooter(OI.normalize(ControlMap.RT, 0, 1.0, 0.1));
-    if(OI.normalize(OI.axis(3,ControlMap.RT), 0, 1.0, 0.1) > 0.0)
+    if(OI.button(2, ControlMap.LB_BUTTON))
+        Turret.lockOn();
+    else 
+      Turret.setSpin(OI.normalize(OI.axis(2, ControlMap.R_JOYSTICK_HORIZONTAL), -0.3, 0.3));
+    
+    if(OI.normalize(OI.axis(2, ControlMap.LT), -1, 1) > 0.5)
     {
-      Loader.setLoaderSpd(1.0);
-    }
-
-    if(OI.axis(3, ControlMap.LT) > 0.3)
-    { 
-      Turret.lockOn();
+      Turret.setShooter(OI.normalize(OI.axis(2, ControlMap.LT), -1, 1));
+     // Loader.setSpinSpd(0.3);
     }
     else
     {
-      Turret.setSpin(OI.normalize(OI.axis(3, ControlMap.L_JOYSTICK_HORIZONTAL), -0.5, 0.5, 0.1));
-    0}
+      Turret.setShooter(0.0);
+      // if(!OI.button(2, ControlMap.A_BUTTON))
+      // {
+      //   Loader.setSpinSpd(0.0);
+      // }
+    }
+
+
   }
+  
 
   @Override
   public void disabledInit() {

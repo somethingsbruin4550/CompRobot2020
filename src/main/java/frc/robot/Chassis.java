@@ -24,7 +24,7 @@ public class Chassis implements RobotMap{
     public static CCSparkMax FLMax = new CCSparkMax(RobotMap.FORWARD_LEFT, MotorType.kBrushless, IdleMode.kBrake, RobotMap.FL_REVERSE);
     public static CCSparkMax BLMax = new CCSparkMax(RobotMap.BACK_LEFT, MotorType.kBrushless, IdleMode.kBrake, RobotMap.BL_REVERSE);
     
-    public static Solenoid shiftSol = new Solenoid(RobotMap.SHIFT_SOLENOID);
+   // public static Solenoid shiftSol = new Solenoid(RobotMap.SHIFT_SOLENOID);
 
     public static double leftSpd = 0;
     public static double rightSpd = 0; 
@@ -110,7 +110,7 @@ public class Chassis implements RobotMap{
      */
     public static void setFastMode(boolean fastMode)
     {
-        shiftSol.set(fastMode);
+       // shiftSol.set(fastMode);
         if(fastMode)
         {
             FRMax.setPositionConversionFactor(0.1090909090909090);
