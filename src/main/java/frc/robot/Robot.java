@@ -20,8 +20,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 // import com.revrobotics.CANSparkMax.IdleMode;
 // import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.wpilibj.DriverStation;
 
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Compressor;
 /**
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the TimedRobot
@@ -36,11 +37,12 @@ public class Robot extends TimedRobot implements RobotMap, ControlMap {
   private static final String kResetPIDs = "Reset PIDs";
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
+  Compressor compressor = new Compressor();
   // private CCSparkMax fly = new CCSparkMax(2, MotorType.kBrushless, IdleMode.kBrake, false);
   // private CCSparkMax turret = new CCSparkMax(1, MotorType.kBrushless, IdleMode.kBrake, false);
   // private Turret turret = new Turret();
 
-  ReleasableButton yButton;
+  private static ReleasableButton yButton = new ReleasableButton();
 
   int alliance;
   double spdmlt = 1;
@@ -100,6 +102,18 @@ public class Robot extends TimedRobot implements RobotMap, ControlMap {
       printCount = 0;
     }
     printCount++;
+
+    if(RobotMap.ENABLE_COMPRESSOR)
+    {
+      compressor.start();
+    }
+    else
+    {
+      compressor.stop();
+    }
+
+    yButton.tick();
+      
   }
 
   /**
@@ -129,7 +143,7 @@ public class Robot extends TimedRobot implements RobotMap, ControlMap {
         //Chassis.setAngle(5);
         break;
       case kCrossLine:
-        Chassis.setDistance(3.5 * 12.0, 0.3);
+        Chassis.setDistance(6.0 * 12.0, 0.3);
         break;
       case kDefaultAuto:
         break;
@@ -153,9 +167,11 @@ public class Robot extends TimedRobot implements RobotMap, ControlMap {
   @Override
   public void teleopInit() {
     Chassis.resetAll();
+    Turret.reset();
     LemonLight.setLight(true);
 
     OI.initJoysticks();
+    Intake.setExtended(false);
   }
 
   /**
@@ -164,28 +180,35 @@ public class Robot extends TimedRobot implements RobotMap, ControlMap {
   @Override
   public void teleopPeriodic() {
     // //Basic Driving
-    Chassis.driveAxis(OI.axis(0, PilotMap.Y_AXIS), OI.axis(1, PilotMap.X_AXIS));
+    // Chassis.driveAxis(OI.axis(0, PilotMap.Y_AXIS), OI.axis(1, PilotMap.X_AXIS));
+    Chassis.driveAxis(OI.axis(2, ControlMap.L_JOYSTICK_VERTICAL), OI.axis(2, ControlMap.L_JOYSTICK_HORIZONTAL));
     Chassis.drive();
     // //Shifting Gearbox Control
-    // Chassis.setFastMode(OI.button(1, PilotMap.TRIGGER));
+    Chassis.setFastMode(OI.button(0, PilotMap.TRIGGER));
+    // Chassis.setFastMode(OI.button(2, ControlMap.B_BUTTON));
 
     //Extends Intake, if extended, spin
-   // Intake.setExtended(yButton.updateButton(OI.button(2, ControlMap.Y_BUTTON), 0.5));
+  //  Intake.setExtended(yButton.updateButton(OI.button(2, ControlMap.Y_BUTTON), 25));
+  // Intake.setExtended(OI.button(2, ControlMap.Y_BUTTON));
+  yButton.updateButton(OI.button(2, ControlMap.Y_BUTTON), 25);
+  Intake.setExtended(yButton.getStatus());
+  // System.out.println(yButton.updateButton(OI.button(2, ControlMap.Y_BUTTON), 0.5));
 
-   if(OI.button(2, ControlMap.RB_BUTTON))
+   if(OI.axis(2, ControlMap.RT) > 0.05)
    {
     Loader.setLoaderSpd(0.7);
    } 
    else 
    {
-     Loader.setLoaderSpd(0.0);
+     Loader.setLoaderSpd(-0.12);
    }
 
+  //  System.out.println(Turret.getEncoder());
 
     if(OI.button(2, ControlMap.A_BUTTON))
     {
-      Intake.setSpd(0.5);
-      Loader.setSpinSpd(0.3);
+      Intake.setSpd(0.7);
+      Loader.setSpinSpd(0.4);
     }
     else
     {
@@ -193,32 +216,41 @@ public class Robot extends TimedRobot implements RobotMap, ControlMap {
     }
 
     if(OI.button(2, ControlMap.LB_BUTTON))
+    {
         Turret.lockOn();
+        // Turret.setShooter(OI.normalize(LemonLight.distToTarget() / 10.0, 0.0, 1.0));
+    }
     else 
       Turret.setSpin(OI.normalize(OI.axis(2, ControlMap.R_JOYSTICK_HORIZONTAL), -0.3, 0.3));
     
     if(OI.normalize(OI.axis(2, ControlMap.LT), -1, 1) > 0.5)
     {
-      Turret.setShooter(OI.normalize(OI.axis(2, ControlMap.LT), -1, 1));
-      Loader.setSpinSpd(0.3);
+      //Turret.setShooter(OI.normalize(OI.axis(2, ControlMap.LT), -1.0, 1.0, 0.1));
+      Turret.setShooter(1.0);
+      Loader.setSpinSpd(0.4);
     }
     else
     {
       Turret.setShooter(0.0);
-      if(!OI.button(2, ControlMap.A_BUTTON))
+      if(!OI.button(2, ControlMap.A_BUTTON) && !OI.button(2, ControlMap.BACK_BUTTON))
       {
         Loader.setSpinSpd(0.0);
       }
     }
 
-
+    if(OI.button(2, ControlMap.BACK_BUTTON))
+    {
+      Loader.setSpinSpd(-0.5);
+      Turret.setShooter(-0.15);
+      Intake.setSpd(-0.4);
+    }
   }
   
 
   @Override
   public void disabledInit() {
     Chassis.disableAll();
-   LemonLight.setLight(false);
+    LemonLight.setLight(false);
   }
 
   /**
@@ -227,11 +259,13 @@ public class Robot extends TimedRobot implements RobotMap, ControlMap {
   @Override
   public void testPeriodic() {
     LemonLight.setLight(true);
+    compressor.start();
 
   }
 
   private void resetAll()
   {
     Chassis.resetAll();
+    Turret.reset();
   }
 }

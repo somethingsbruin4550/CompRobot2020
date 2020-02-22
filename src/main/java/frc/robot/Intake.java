@@ -15,7 +15,8 @@ import frc.parent.*;
 public class Intake implements RobotMap
 {
     public static CCSparkMax max = new CCSparkMax(RobotMap.INTAKE, MotorType.kBrushed, IdleMode.kBrake, RobotMap.INTAKE_REVERSE);
-    //public static Solenoid sol = new Solenoid(RobotMap.INTAKE_SOLENDOID);
+    public static Solenoid sol1 = new Solenoid(RobotMap.INTAKE_SOLENOID_ONE);
+    public static Solenoid sol2 = new Solenoid(RobotMap.INTAKE_SOLENOID_TWO);
 
     /**
      * @param extended If true, pnumatics will extend. 
@@ -23,8 +24,8 @@ public class Intake implements RobotMap
      */
     public static void setExtended(boolean extended)
     {
-     //   sol.set(extended);
-        // max.disable();
+        sol1.set(!extended);
+        sol2.set(extended);
     }
 
     /**
@@ -32,6 +33,13 @@ public class Intake implements RobotMap
      */
     public static void setSpd(double spd)
     {
-        max.setSpd(spd);
+        if(!sol1.get())
+        {
+            max.setSpd(spd);
+        }
+        else
+        {
+            max.setSpd(0.0);
+        }
     }
 }

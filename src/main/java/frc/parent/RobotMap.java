@@ -6,6 +6,7 @@ package frc.parent;
  * It can store any values that you may need to change quickly
  */
 public interface RobotMap {
+    public static final boolean ENABLE_COMPRESSOR = true;
 
     public static final int NUM_JOYSTICKS = 3;
 
@@ -19,12 +20,15 @@ public interface RobotMap {
     public static final int BACK_RIGHT = 4;
     public static final boolean BR_REVERSE = false;
 
-    public static final int SHIFT_SOLENOID = 0;
+    public static final int SHIFT_SOLENOID_ONE = 6;
+    public static final int SHIFT_SOLENOID_TWO = 7;
 
     // Motor Ports for Intake
     public static final int INTAKE = 8;
     public static final boolean INTAKE_REVERSE = false;
-    public static final int INTAKE_SOLENDOID = 1;
+    public static final int INTAKE_SOLENOID_ONE = 5;
+    public static final int INTAKE_SOLENOID_TWO = 4;
+
 
     // Motor ports for Climber
     // public static final int CLIMBER = -1;
@@ -32,7 +36,7 @@ public interface RobotMap {
     public static final int LOADER = 6;
     public static final boolean LOADER_REVERSE = false;
     public static final int SPINDEXER = 7;
-    public static final boolean SPINDEXER_REVERSE = false;
+    public static final boolean SPINDEXER_REVERSE = true;
 
     // Motor ports for the yeeter
     public static final int SHOOTER_ONE = 9;

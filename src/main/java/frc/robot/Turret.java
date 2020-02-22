@@ -32,7 +32,12 @@ public class Turret implements RobotMap{
      * @param spd Domina: [-1, 1]
      */
     public static void setSpin(double spd){
-        maxTurret.setSpd(spd);
+        if(spd > 0 && !(getEncoder() > 35))
+            maxTurret.setSpd(spd);
+        else if(spd < 0 && !(getEncoder() < -35))
+            maxTurret.setSpd(spd);
+        else 
+            maxTurret.setSpd(0);
     }
 
     /**
@@ -45,7 +50,7 @@ public class Turret implements RobotMap{
         maxShooter2.setSpd(-spd);
     }
 
-    /**
+    /** -+
      * Sets the PID consts for pidController
      * @param Kp P const
      * @param Ki I const
@@ -54,7 +59,18 @@ public class Turret implements RobotMap{
      */
     public static void setConst(double Kp, double Ki, double Kd, double Ff){
         maxTurret.setPID(Kp, Ki, Kd, Ff);
-    } 
+    }
+    
+    public static double getEncoder(){
+        return maxTurret.getPosition();
+    }
+
+    public static void reset(){
+        maxTurret.setPosition(0);
+    }
+
+    public static void restrictTurret(){
+    }
 
     /**
      * Locks on to the target when LemonLight is active
@@ -63,7 +79,7 @@ public class Turret implements RobotMap{
         if(LemonLight.hasTarget())
         {
             double outYaw = OI.normalize(LemonLight.getYaw(), -RobotMap.TURRET_SPD, RobotMap.TURRET_SPD, RobotMap.TURRET_TARGETING_THRESHOLD);
-            System.out.println(outYaw);
+            // System.out.println(outYaw);
             setSpin(outYaw);
         }
         else

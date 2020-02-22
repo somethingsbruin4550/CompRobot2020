@@ -23,7 +23,7 @@ public interface ControlMap {
     public static final int Y_BUTTON = 4;
     public static final int LB_BUTTON = 5;
     public static final int RB_BUTTON = 6;
-    public static final int SELECT_BUTTON = 7;
+    public static final int BACK_BUTTON = 7;
     public static final int START_BUTTON = 8;
     // These buttons are when you push down the left and right circle pad
     public static final int L_JOYSTICK_BUTTON = 9;
