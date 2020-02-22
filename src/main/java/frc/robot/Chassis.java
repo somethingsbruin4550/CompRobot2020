@@ -6,14 +6,15 @@ import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-//import edu.wpi.first.wpilibj.Encoder;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SPI;
-//import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.Solenoid;
 
 /**
- * The robot chassis
+ * This class contains the code for the chassis
+ * Any mechanism that would be considered the "Chassis" is included
+ * In FRC 2020, this includes the DriveTrain aswell as code for shifting gbs
+ * The gyro is also included
  */
 public class Chassis implements RobotMap{
 

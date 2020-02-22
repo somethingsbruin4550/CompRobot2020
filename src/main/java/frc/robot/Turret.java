@@ -27,20 +27,38 @@ public class Turret implements RobotMap{
     private static CCSparkMax maxShooter1 = new CCSparkMax(RobotMap.SHOOTER_ONE, MotorType.kBrushless, IdleMode.kBrake, RobotMap.SHOOTER_ONE_REVERSE);
     private static CCSparkMax maxShooter2 = new CCSparkMax(RobotMap.SHOOTER_TWO, MotorType.kBrushless, IdleMode.kBrake, RobotMap.SHOOTER_TWO_REVERSE);
 
+    /**
+     * Sets the spin of the turret
+     * @param spd Domina: [-1, 1]
+     */
     public static void setSpin(double spd){
         maxTurret.setSpd(spd);
     }
 
+    /**
+     * Sets both flywheel speeds
+     * @param spd Domain: [-1, 1]
+     */
     public static void setShooter(double spd)
     {
         maxShooter1.setSpd(spd);
         maxShooter2.setSpd(-spd);
     }
 
+    /**
+     * Sets the PID consts for pidController
+     * @param Kp P const
+     * @param Ki I const
+     * @param Kd D const
+     * @param Ff Feed forward 
+     */
     public static void setConst(double Kp, double Ki, double Kd, double Ff){
         maxTurret.setPID(Kp, Ki, Kd, Ff);
     } 
 
+    /**
+     * Locks on to the target when LemonLight is active
+     */
     public static void lockOn(){
         if(LemonLight.hasTarget())
         {

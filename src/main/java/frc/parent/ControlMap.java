@@ -1,5 +1,11 @@
 package frc.parent;
 
+/**
+ * This interface serves to have easy accsess to the port of the controller
+ * This is not to be touched and/or modified. 
+ * 
+ * To accsess port: i.e. ControlMap.RT 
+ */
 
 public interface ControlMap {
     // Joystick Axises

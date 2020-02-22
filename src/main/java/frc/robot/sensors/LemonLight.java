@@ -52,6 +52,6 @@ public class LemonLight{
      * @param status Enables/Disables the camera light
      */
     public static void setLight(boolean status){
-        relay.set(!status);
+        relay.set(status);
     }
 }

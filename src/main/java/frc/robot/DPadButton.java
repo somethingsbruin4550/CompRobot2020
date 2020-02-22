@@ -3,6 +3,11 @@ package frc.robot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 
+/**
+ * In regualar controllers, the DPad is considered an axis, like a joystick
+ * This class converts that axis into 4 buttons: Up, Down, Left, and Right
+ */
+
 public class DPadButton extends Button {
 
     Joystick joystick;

@@ -1,5 +1,12 @@
 package frc.parent; 
 
+/**
+ * This interface is designed to provide acsess to the various ports on the Joysticks
+ * This interface is not to be touched or modified
+ * 
+ * To call the port: i.e. PilotMap.X_AXIS
+ */
+
 public interface PilotMap {
     //Stick ports
     public static int X_AXIS = 0;

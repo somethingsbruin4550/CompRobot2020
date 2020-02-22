@@ -1,5 +1,10 @@
 package frc.parent;
 
+/**
+ * This interface is desgined to store the ports for the robot
+ * This inludes, can bus, polarity, pcm ports.
+ * It can store any values that you may need to change quickly
+ */
 public interface RobotMap {
 
     public static final int NUM_JOYSTICKS = 3;

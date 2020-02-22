@@ -5,6 +5,8 @@ import com.revrobotics.CANError;
 import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.ControlType;
+import com.revrobotics.EncoderType;
+import com.revrobotics.CANEncoder;
 
 //Documention: http://www.revrobotics.com/content/sw/max/sw-docs/java/com/revrobotics/CANSparkMax.html#%3Cinit%3E(int,com.revrobotics.CANSparkMaxLowLevel.MotorType)
 
@@ -27,11 +29,12 @@ public class CCSparkMax extends CANSparkMax{
     public CCSparkMax(int deviceID, MotorType controlMode, IdleMode idleMode, boolean reverse){
         super(deviceID, controlMode);
         pidController = super.getPIDController();
-        encoder = super.getEncoder();
 
         if(controlMode == MotorType.kBrushed)
         {
-            
+            encoder = super.getEncoder(EncoderType.kNoSensor, 0);
+        } else {
+            encoder = super.getEncoder(EncoderType.kHallSensor, 0);
         }
         if(super.setIdleMode(idleMode) != CANError.kOk){
             System.out.println("Spark Max Idle Mode Not Set");

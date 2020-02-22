@@ -164,24 +164,28 @@ public class Robot extends TimedRobot implements RobotMap, ControlMap {
   @Override
   public void teleopPeriodic() {
     // //Basic Driving
-    // Chassis.driveAxis(OI.axis(0, PilotMap.Y_AXIS), OI.axis(1, PilotMap.X_AXIS));
-    // Chassis.drive();
+    Chassis.driveAxis(OI.axis(0, PilotMap.Y_AXIS), OI.axis(1, PilotMap.X_AXIS));
+    Chassis.drive();
     // //Shifting Gearbox Control
     // Chassis.setFastMode(OI.button(1, PilotMap.TRIGGER));
 
     //Extends Intake, if extended, spin
    // Intake.setExtended(yButton.updateButton(OI.button(2, ControlMap.Y_BUTTON), 0.5));
 
-   if(OI.axis(2, ControlMap.RT) > 0.05)
+   if(OI.button(2, ControlMap.RB_BUTTON))
    {
-     Loader.setLoaderSpd(1.0);
+    Loader.setLoaderSpd(0.7);
+   } 
+   else 
+   {
+     Loader.setLoaderSpd(0.0);
    }
 
 
     if(OI.button(2, ControlMap.A_BUTTON))
     {
       Intake.setSpd(0.5);
-     // Loader.setSpinSpd(0.3);
+      Loader.setSpinSpd(0.3);
     }
     else
     {
@@ -196,15 +200,15 @@ public class Robot extends TimedRobot implements RobotMap, ControlMap {
     if(OI.normalize(OI.axis(2, ControlMap.LT), -1, 1) > 0.5)
     {
       Turret.setShooter(OI.normalize(OI.axis(2, ControlMap.LT), -1, 1));
-     // Loader.setSpinSpd(0.3);
+      Loader.setSpinSpd(0.3);
     }
     else
     {
       Turret.setShooter(0.0);
-      // if(!OI.button(2, ControlMap.A_BUTTON))
-      // {
-      //   Loader.setSpinSpd(0.0);
-      // }
+      if(!OI.button(2, ControlMap.A_BUTTON))
+      {
+        Loader.setSpinSpd(0.0);
+      }
     }
 
 
