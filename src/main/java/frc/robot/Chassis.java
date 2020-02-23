@@ -118,8 +118,8 @@ public class Chassis implements RobotMap{
             BRMax.setPositionConversionFactor(0.1090909090909090);
             FLMax.setPositionConversionFactor(0.1090909090909090);
             BLMax.setPositionConversionFactor(0.1090909090909090);
-            shiftSolOne.set(fastMode);
-            shiftSolTwo.set(!fastMode);
+            shiftSolOne.set(true);
+            shiftSolTwo.set(false);
         }
         else
         {
@@ -127,8 +127,8 @@ public class Chassis implements RobotMap{
             BRMax.setPositionConversionFactor(0.048);
             FLMax.setPositionConversionFactor(0.048);
             BLMax.setPositionConversionFactor(0.048);
-            shiftSolOne.set(!fastMode);
-            shiftSolTwo.set(fastMode);
+            shiftSolOne.set(false);
+            shiftSolTwo.set(true);
         }
 
         FRMax.setPosition(0);
