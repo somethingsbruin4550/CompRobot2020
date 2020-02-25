@@ -10,8 +10,8 @@ package frc.robot;
 import frc.parent.*;
 import frc.robot.sensors.*;
 
-
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -34,6 +34,7 @@ public class Robot extends TimedRobot implements RobotMap, ControlMap {
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
   private static final String kCrossLine = "Cross Line";
+  private static final String kMoveShoot = "Cross Line and Shoot";
   private static final String kResetPIDs = "Reset PIDs";
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
@@ -61,11 +62,11 @@ public class Robot extends TimedRobot implements RobotMap, ControlMap {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     m_chooser.addOption("Cross Line", kCrossLine);
+    m_chooser.addOption("Cross Line and Shoot", kMoveShoot);
     m_chooser.addOption("Reset PID Values", kResetPIDs);
     SmartDashboard.putData("Auto choices", m_chooser);
     
     LemonLight.setLightChannel(0);
-
 
     printCount = 0;
   
@@ -114,7 +115,7 @@ public class Robot extends TimedRobot implements RobotMap, ControlMap {
 
     yButton.tick();
 
-    System.out.println(Turret.getShooterCurrent());
+    System.out.println(Loader.spinMax.getPosition());
       
   }
 
@@ -145,7 +146,21 @@ public class Robot extends TimedRobot implements RobotMap, ControlMap {
         //Chassis.setAngle(5);
         break;
       case kCrossLine:
-        Chassis.setDistance(6.0 * 12.0, 0.3);
+        Chassis.setTargetDistance(4.0 * 12.0, 0.2);
+        break;
+      case kMoveShoot:
+        Chassis.setTargetDistance(4.0 * 12.0, 0.2);
+        Turret.lockOnForTime(3);
+        Turret.setShooter(Turret.getShooterSpeedFromDistance());
+        Loader.setLoaderSpd(RobotMap.LOADER_FWD_SPEED);
+        Loader.spinMax.setPosition(0.0);
+        Loader.setSpinSpd(RobotMap.SPINDEXER_SPEED);
+        while(Loader.spinMax.getPosition() < 1000.0);
+        Loader.setSpinSpd(0.0);
+        Loader.setLoaderSpd(RobotMap.LOADER_REV_SPEED);
+        Turret.setSpin(0.0);
+        Turret.maxShooter1.disable();
+        Turret.maxShooter2.disable();
         break;
       case kDefaultAuto:
         break;
@@ -198,19 +213,19 @@ public class Robot extends TimedRobot implements RobotMap, ControlMap {
 
    if(OI.axis(2, ControlMap.RT) > 0.05)
    {
-    Loader.setLoaderSpd(0.7);
+    Loader.setLoaderSpd(RobotMap.LOADER_FWD_SPEED);
    } 
    else 
    {
-     Loader.setLoaderSpd(-0.12);
+     Loader.setLoaderSpd(RobotMap.LOADER_REV_SPEED);
    }
 
   //  System.out.println(Turret.getEncoder());
 
     if(OI.button(2, ControlMap.A_BUTTON))
     {
-      Intake.setSpd(0.7);
-      Loader.setSpinSpd(0.4);
+      Intake.setSpd(RobotMap.INTAKE_SPD);
+      Loader.setSpinSpd(RobotMap.SPINDEXER_SPEED);
     }
     else
     {
@@ -227,9 +242,10 @@ public class Robot extends TimedRobot implements RobotMap, ControlMap {
     
     if(OI.normalize(OI.axis(2, ControlMap.LT), -1, 1) > 0.5)
     {
-      //Turret.setShooter(OI.normalize(OI.axis(2, ControlMap.LT), -1.0, 1.0, 0.1));
+      // Turret.setShooter(OI.normalize(OI.axis(2, ControlMap.LT), -1.0, 1.0, 0.1));
+      // Turret.setShooter(Turret.getShooterSpeedFromDistance());4
       Turret.setShooter(1.0);
-      Loader.setSpinSpd(0.4);
+      Loader.setSpinSpd(RobotMap.SPINDEXER_SPEED);
     }
     else
     {
@@ -269,5 +285,6 @@ public class Robot extends TimedRobot implements RobotMap, ControlMap {
   {
     Chassis.resetAll();
     Turret.reset();
+    Loader.reset();
   }
 }

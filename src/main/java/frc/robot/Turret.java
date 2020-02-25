@@ -6,6 +6,8 @@ import frc.robot.sensors.LemonLight;
 import com.revrobotics.CANSparkMax.*;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.Timer;
+
 // import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 // import edu.wpi.first.wpilibj.AnalogPotentiometer;
 // import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -23,9 +25,9 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
  */
 public class Turret implements RobotMap{
     // public AnalogPotentiometer potent = new AnalogPotentiometer(RobotMap.POTENTIOMETER);
-    private static CCSparkMax maxTurret = new CCSparkMax(RobotMap.TURRET, MotorType.kBrushless, IdleMode.kBrake, RobotMap.TURRET_REVERSE);
-    private static CCSparkMax maxShooter1 = new CCSparkMax(RobotMap.SHOOTER_ONE, MotorType.kBrushless, IdleMode.kCoast, RobotMap.SHOOTER_ONE_REVERSE);
-    private static CCSparkMax maxShooter2 = new CCSparkMax(RobotMap.SHOOTER_TWO, MotorType.kBrushless, IdleMode.kCoast, RobotMap.SHOOTER_TWO_REVERSE);
+    public static CCSparkMax maxTurret = new CCSparkMax(RobotMap.TURRET, MotorType.kBrushless, IdleMode.kBrake, RobotMap.TURRET_REVERSE);
+    public static CCSparkMax maxShooter1 = new CCSparkMax(RobotMap.SHOOTER_ONE, MotorType.kBrushless, IdleMode.kBrake, RobotMap.SHOOTER_ONE_REVERSE);
+    public static CCSparkMax maxShooter2 = new CCSparkMax(RobotMap.SHOOTER_TWO, MotorType.kBrushless, IdleMode.kBrake, RobotMap.SHOOTER_TWO_REVERSE);
 
     /**
      * Sets the spin of the turret
@@ -46,7 +48,7 @@ public class Turret implements RobotMap{
      */
     public static void setShooter(double spd)
     {
-        maxShooter1.setSpd(spd);
+       // maxShooter1.setSpd(spd);
         maxShooter2.setSpd(spd);
         // System.out.println(maxShooter1.getOutputCurrent());
     }
@@ -85,9 +87,31 @@ public class Turret implements RobotMap{
         }
         else
         {
-            System.out.println("No Target");
+            // System.out.println("No Target");
             setSpin(0.0);
         }
+    }
+
+    /**
+     * Locks on to the target for a period of time
+     * @param time Time to target for in seconds
+     */
+    public static void lockOnForTime(double time)
+    {
+        for(int i = 0; i < 500.0 * time; i++)
+        {
+          Turret.lockOn();
+          Timer.delay(time/(500.0 * time));
+        }
+    }
+
+    /**
+     * Uses the tested equation to get the desired shooter speed from the LemonLight distacne
+     * @return The correct shooter speed
+     */
+    public static double getShooterSpeedFromDistance()
+    {
+        return OI.normalize(LemonLight.distToTarget(), -1.0, 1.0);
     }
 
     /**

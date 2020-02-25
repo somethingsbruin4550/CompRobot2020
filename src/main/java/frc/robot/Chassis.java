@@ -80,7 +80,7 @@ public class Chassis implements RobotMap{
      * Sets the target motor position
      * @param dist The distance in inches
      */
-    public static void setDistance(double dist, double maxSpd){
+    public static void setTargetDistance(double dist, double maxSpd){
         FRMax.setMaxSpd(-maxSpd, maxSpd);
         BRMax.setMaxSpd(-maxSpd, maxSpd);
         FLMax.setMaxSpd(-maxSpd, maxSpd);

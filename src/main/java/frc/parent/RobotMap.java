@@ -26,6 +26,7 @@ public interface RobotMap {
     // Motor Ports for Intake
     public static final int INTAKE = 8;
     public static final boolean INTAKE_REVERSE = false;
+    public static final double INTAKE_SPD = 0.7;
     public static final int INTAKE_SOLENOID_ONE = 5;
     public static final int INTAKE_SOLENOID_TWO = 4;
 
@@ -35,8 +36,12 @@ public interface RobotMap {
 
     public static final int LOADER = 6;
     public static final boolean LOADER_REVERSE = false;
+    public static final double LOADER_FWD_SPEED = 0.7;
+    public static final double LOADER_REV_SPEED = -0.12;
+
     public static final int SPINDEXER = 7;
     public static final boolean SPINDEXER_REVERSE = true;
+    public static final double SPINDEXER_SPEED = 0.5;
 
     // Motor ports for the yeeter
     public static final int SHOOTER_ONE = 9;
