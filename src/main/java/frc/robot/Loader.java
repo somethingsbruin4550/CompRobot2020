@@ -20,7 +20,7 @@ public class Loader implements RobotMap
      */
     public static void setSpinSpd(double spd)
     {
-        spinMax.setSpd(spd);
+    //    spinMax.setSpd(spd);
     }
 
     /**
@@ -29,6 +29,6 @@ public class Loader implements RobotMap
      */
     public static void setLoaderSpd(double spd)
     {
-        loaderMax.setSpd(spd);
+        // loaderMax.setSpd(spd);
     }
 }

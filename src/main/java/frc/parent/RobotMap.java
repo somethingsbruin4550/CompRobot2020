@@ -6,7 +6,7 @@ package frc.parent;
  * It can store any values that you may need to change quickly
  */
 public interface RobotMap {
-    public static final boolean ENABLE_COMPRESSOR = true;
+    public static final boolean ENABLE_COMPRESSOR = false;
 
     public static final int NUM_JOYSTICKS = 3;
 
@@ -42,7 +42,7 @@ public interface RobotMap {
     public static final int SHOOTER_ONE = 9;
     public static final int SHOOTER_TWO = 10;
     public static final boolean SHOOTER_ONE_REVERSE = false;
-    public static final boolean SHOOTER_TWO_REVERSE = false;
+    public static final boolean SHOOTER_TWO_REVERSE = true;
 
     public static final int TURRET = 5;
     public static final boolean TURRET_REVERSE = true;

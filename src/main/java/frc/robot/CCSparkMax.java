@@ -40,6 +40,7 @@ public class CCSparkMax extends CANSparkMax{
             System.out.println("Spark Max Idle Mode Not Set");
         }
         super.setInverted(reverse);
+        
     }
 
     /**

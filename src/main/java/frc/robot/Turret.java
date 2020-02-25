@@ -24,8 +24,8 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 public class Turret implements RobotMap{
     // public AnalogPotentiometer potent = new AnalogPotentiometer(RobotMap.POTENTIOMETER);
     private static CCSparkMax maxTurret = new CCSparkMax(RobotMap.TURRET, MotorType.kBrushless, IdleMode.kBrake, RobotMap.TURRET_REVERSE);
-    private static CCSparkMax maxShooter1 = new CCSparkMax(RobotMap.SHOOTER_ONE, MotorType.kBrushless, IdleMode.kBrake, RobotMap.SHOOTER_ONE_REVERSE);
-    private static CCSparkMax maxShooter2 = new CCSparkMax(RobotMap.SHOOTER_TWO, MotorType.kBrushless, IdleMode.kBrake, RobotMap.SHOOTER_TWO_REVERSE);
+    private static CCSparkMax maxShooter1 = new CCSparkMax(RobotMap.SHOOTER_ONE, MotorType.kBrushless, IdleMode.kCoast, RobotMap.SHOOTER_ONE_REVERSE);
+    private static CCSparkMax maxShooter2 = new CCSparkMax(RobotMap.SHOOTER_TWO, MotorType.kBrushless, IdleMode.kCoast, RobotMap.SHOOTER_TWO_REVERSE);
 
     /**
      * Sets the spin of the turret
@@ -47,7 +47,8 @@ public class Turret implements RobotMap{
     public static void setShooter(double spd)
     {
         maxShooter1.setSpd(spd);
-        maxShooter2.setSpd(-spd);
+        maxShooter2.setSpd(spd);
+        // System.out.println(maxShooter1.getOutputCurrent());
     }
 
     /** -+
@@ -87,6 +88,14 @@ public class Turret implements RobotMap{
             System.out.println("No Target");
             setSpin(0.0);
         }
+    }
+
+    /**
+     * @return The total current from the shooter motors
+     */
+    public static double getShooterCurrent()
+    {
+        return maxShooter1.getOutputCurrent() + maxShooter2.getOutputCurrent();
     }
 
 }
