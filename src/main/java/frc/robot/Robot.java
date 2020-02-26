@@ -115,7 +115,7 @@ public class Robot extends TimedRobot implements RobotMap, ControlMap {
 
     yButton.tick();
 
-    System.out.println(Loader.spinMax.getPosition());
+    // System.out.println(Loader.spinMax.getPosition());
       
   }
 
@@ -198,7 +198,7 @@ public class Robot extends TimedRobot implements RobotMap, ControlMap {
   public void teleopPeriodic() {
     // //Basic Driving
     Chassis.driveAxis(OI.axis(0, PilotMap.Y_AXIS), OI.axis(1, PilotMap.X_AXIS));
-    // Chassis.driveAxis(OI.axis(2, ControlMap.L_JOYSTICK_VERTICAL), OI.axis(2, ControlMap.L_JOYSTICK_HORIZONTAL));
+   // Chassis.driveAxis(OI.axis(2, ControlMap.L_JOYSTICK_VERTICAL), OI.axis(2, ControlMap.L_JOYSTICK_HORIZONTAL));
     Chassis.drive();
     // //Shifting Gearbox Control
     Chassis.setFastMode(OI.button(0, PilotMap.TRIGGER));
