@@ -3,6 +3,7 @@ package frc.robot;
 import frc.parent.*;
 import frc.robot.sensors.LemonLight;
 
+import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMax.*;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -43,13 +44,24 @@ public class Turret implements RobotMap{
     }
 
     /**
-     * Sets both flywheel speeds
+     * Sets both flywheel speeds (voltage)
      * @param spd Domain: [-1, 1]
      */
-    public static void setShooter(double spd)
+    public static void setShooterRaw(double spd)
     {
        // maxShooter1.setSpd(spd);
         maxShooter2.setSpd(spd);
+        // System.out.println(maxShooter1.getOutputCurrent());
+    }
+
+    /**
+     * Sets both flywheel speeds (Velocity)
+     * @param spd Domain: [-1, 1]
+     */
+    public static void setShooterVelocity(double vel)
+    {
+       // maxShooter1.setSpd(spd);
+        maxShooter2.setSpd(vel);
         // System.out.println(maxShooter1.getOutputCurrent());
     }
 
@@ -79,16 +91,22 @@ public class Turret implements RobotMap{
      * Locks on to the target when LemonLight is active
      */
     public static void lockOn(){
+        // System.out.println("Has Target: " + LemonLight.hasTarget());
         if(LemonLight.hasTarget())
         {
-            double outYaw = OI.normalize(LemonLight.getYaw(), -RobotMap.TURRET_SPD, RobotMap.TURRET_SPD, RobotMap.TURRET_TARGETING_THRESHOLD);
-            // System.out.println(outYaw);
-            setSpin(outYaw);
+            // double outYaw = OI.normalize(LemonLight.getYaw(), -RobotMap.TURRET_SPD, RobotMap.TURRET_SPD, RobotMap.TURRET_TARGETING_THRESHOLD);
+
+            // System.out.println("Out Yaw: " + outYaw);
+            // setSpin(OI.normalize(outYaw, -0.15, 0.15));
+            maxTurret.setPosition(0.0);
+            maxTurret.setTarget(LemonLight.getYaw(), ControlType.kPosition);
         }
         else
         {
-            // System.out.println("No Target");
+            System.out.println("No Target");
             setSpin(0.0);
+            maxTurret.setSpd(0.0);
+           // maxShooter2.setVelocity(0.85);
         }
     }
 
@@ -109,9 +127,10 @@ public class Turret implements RobotMap{
      * Uses the tested equation to get the desired shooter speed from the LemonLight distacne
      * @return The correct shooter speed
      */
-    public static double getShooterSpeedFromDistance()
+    public static double getShooterVelocityFromDistance()
     {
-        return OI.normalize(LemonLight.distToTarget(), -1.0, 1.0);
+        double dist = LemonLight.distToTarget();
+        return OI.normalize(0.0239 * Math.pow(dist, 2) - 0.1015 * dist + 0.9231, -1.0, 1.0);
     }
 
     /**

@@ -41,7 +41,7 @@ public class Robot extends TimedRobot implements RobotMap, ControlMap {
   Compressor compressor = new Compressor();
   // private CCSparkMax fly = new CCSparkMax(2, MotorType.kBrushless, IdleMode.kBrake, false);
   // private CCSparkMax turret = new CCSparkMax(1, MotorType.kBrushless, IdleMode.kBrake, false);
-  // private Turret turret = new Turret();
+  // private Turret turret = new Turret(); 
 
   private static ReleasableButton yButton = new ReleasableButton();
 
@@ -65,8 +65,14 @@ public class Robot extends TimedRobot implements RobotMap, ControlMap {
     m_chooser.addOption("Cross Line and Shoot", kMoveShoot);
     m_chooser.addOption("Reset PID Values", kResetPIDs);
     SmartDashboard.putData("Auto choices", m_chooser);
+
+    SmartDashboard.putNumber("Shooter Spd", 1.0);
     
     LemonLight.setLightChannel(0);
+
+    Turret.maxTurret.setPID(0.05, 0.0, 0.0, 0.0);
+    // Turret.maxTurret.setMaxSpd(-0.15, 0.15);
+    Turret.maxShooter2.setPID(0.05, 0.0, 0.0, 0.0);
 
     printCount = 0;
   
@@ -95,11 +101,14 @@ public class Robot extends TimedRobot implements RobotMap, ControlMap {
    */
   @Override
   public void robotPeriodic() {
-    if(printCount > 20)
+    if(printCount > 7)
     {
      // System.out.println("Angle: " + Chassis.getAngle());
     //  System.out.println("Position: " + Chassis.driveLeft.getPosition());
       // System.out.println(LemonLight.getYaw());
+      // System.out.println("Turret Encoder: " + Turret.maxTurret.)
+      // System.out.println("Dist to Target: " + LemonLight.distToTarget());
+      // System.out.println("Shooter Velocity: " + Turret.getShooterVelocityFromDistance());
       printCount = 0;
     }
     printCount++;
@@ -139,6 +148,7 @@ public class Robot extends TimedRobot implements RobotMap, ControlMap {
     // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
     System.out.println("Auto selected: " + m_autoSelected);
     
+    System.out.println("Shooter Speed: " + SmartDashboard.getNumber("Shooter Spd", 0.0));
 
     switch (m_autoSelected) {
       case kCustomAuto:
@@ -151,7 +161,6 @@ public class Robot extends TimedRobot implements RobotMap, ControlMap {
       case kMoveShoot:
         Chassis.setTargetDistance(4.0 * 12.0, 0.2);
         Turret.lockOnForTime(3);
-        Turret.setShooter(Turret.getShooterSpeedFromDistance());
         Loader.setLoaderSpd(RobotMap.LOADER_FWD_SPEED);
         Loader.spinMax.setPosition(0.0);
         Loader.setSpinSpd(RobotMap.SPINDEXER_SPEED);
@@ -178,7 +187,7 @@ public class Robot extends TimedRobot implements RobotMap, ControlMap {
    */
   @Override
   public void autonomousPeriodic() {
-    Turret.setShooter(OI.normalize(0.5, -1, 1));
+    Turret.setShooterVelocity(SmartDashboard.getNumber("Shooter Spd", 0.0));
   }
 
   @Override
@@ -189,6 +198,8 @@ public class Robot extends TimedRobot implements RobotMap, ControlMap {
 
     OI.initJoysticks();
     Intake.setExtended(false);
+
+    System.out.println("Shooter Speed: " + SmartDashboard.getNumber("Shooter Spd", 0.0));
   }
 
   /**
@@ -196,31 +207,24 @@ public class Robot extends TimedRobot implements RobotMap, ControlMap {
    */
   @Override
   public void teleopPeriodic() {
+  
     // //Basic Driving
-    Chassis.driveAxis(OI.axis(0, PilotMap.Y_AXIS), OI.axis(1, PilotMap.X_AXIS));
-   // Chassis.driveAxis(OI.axis(2, ControlMap.L_JOYSTICK_VERTICAL), OI.axis(2, ControlMap.L_JOYSTICK_HORIZONTAL));
+    //  Chassis.driveAxis(OI.axis(0, PilotMap.Y_AXIS), OI.axis(1, PilotMap.X_AXIS));
+    Chassis.driveAxis(OI.normalize(OI.axis(0, PilotMap.Y_AXIS), -0.3, 0.3, 0.05), OI.normalize(OI.axis(1, PilotMap.X_AXIS), -0.3, 0.3, 0.05));
+    //Chassis.driveAxis(OI.normalize(OI.axis(2, ControlMap.L_JOYSTICK_VERTICAL), -0.3, 0.3, 0.05), OI.normalize(OI.axis(2, ControlMap.L_JOYSTICK_HORIZONTAL), -0.3, 0.3, 0.05));
     Chassis.drive();
     // //Shifting Gearbox Control
     Chassis.setFastMode(OI.button(0, PilotMap.TRIGGER));
     // Chassis.setFastMode(OI.button(2, ControlMap.B_BUTTON));
 
     //Extends Intake, if extended, spin
-  //  Intake.setExtended(yButton.updateButton(OI.button(2, ControlMap.Y_BUTTON), 25));
-  // Intake.setExtended(OI.button(2, ControlMap.Y_BUTTON));
-  yButton.updateButton(OI.button(2, ControlMap.Y_BUTTON), 25);
-  Intake.setExtended(yButton.getStatus());
-  // System.out.println(yButton.updateButton(OI.button(2, ControlMap.Y_BUTTON), 0.5));
+    //  Intake.setExtended(yButton.updateButton(OI.button(2, ControlMap.Y_BUTTON), 25));
+    // Intake.setExtended(OI.button(2, ControlMap.Y_BUTTON));
+    yButton.updateButton(OI.button(2, ControlMap.Y_BUTTON), 25);
+    Intake.setExtended(yButton.getStatus());
+    // System.out.println(yButton.updateButton(OI.button(2, ControlMap.Y_BUTTON), 0.5));
 
-   if(OI.axis(2, ControlMap.RT) > 0.05)
-   {
-    Loader.setLoaderSpd(RobotMap.LOADER_FWD_SPEED);
-   } 
-   else 
-   {
-     Loader.setLoaderSpd(RobotMap.LOADER_REV_SPEED);
-   }
-
-  //  System.out.println(Turret.getEncoder());
+    // System.out.println(Turret.getEncoder());
 
     if(OI.button(2, ControlMap.A_BUTTON))
     {
@@ -232,34 +236,54 @@ public class Robot extends TimedRobot implements RobotMap, ControlMap {
       Intake.setSpd(0);
     }
 
-    if(OI.button(2, ControlMap.LB_BUTTON))
-    {
-        Turret.lockOn();
-        // Turret.setShooter(OI.normalize(LemonLight.distToTarget() / 10.0, 0.0, 1.0));
-    }
-    else 
-      Turret.setSpin(OI.normalize(OI.axis(2, ControlMap.R_JOYSTICK_HORIZONTAL), -0.3, 0.3));
+    // if(OI.button(2, ControlMap.LB_BUTTON))
+    // {
+    //     Turret.lockOn();
+    //     // Turret.setShooter(OI.normalize(LemonLight.distToTarget() / 10.0, 0.0, 1.0));
+    // }
+    // else 
+    //   Turret.setSpin(OI.normalize(OI.axis(2, ControlMap.R_JOYSTICK_HORIZONTAL), -0.3, 0.3, 0.05));
     
+    if(OI.axis(2, ControlMap.RT) > 0.05)
+    {
+      Loader.setLoaderSpd(RobotMap.LOADER_FWD_SPEED);
+      Loader.setSpinSpd(RobotMap.SPINDEXER_SPEED);
+    } 
+    else 
+    {
+      Loader.setLoaderSpd(RobotMap.LOADER_REV_SPEED);
+      // Loader.setSpinSpd(0.0);
+    }
+
     if(OI.normalize(OI.axis(2, ControlMap.LT), -1, 1) > 0.5)
     {
       // Turret.setShooter(OI.normalize(OI.axis(2, ControlMap.LT), -1.0, 1.0, 0.1));
-      // Turret.setShooter(Turret.getShooterSpeedFromDistance());4
-      Turret.setShooter(1.0);
-      Loader.setSpinSpd(RobotMap.SPINDEXER_SPEED);
+      // Turret.setShooter(Turret.getShooterSpeedFromDistance());
+      // Turret.setShooter(1.0);
+      // Turret.setShooterVelocity(SmartDashboard.getNumber("Shooter Spd", 0.0));
+      Turret.lockOn();
+      Turret.setShooterVelocity(Turret.getShooterVelocityFromDistance());
+
+      // Loader.setSpinSpd(RobotMap.SPINDEXER_SPEED);
     }
     else
     {
-      Turret.setShooter(0.0);
-      if(!OI.button(2, ControlMap.A_BUTTON) && !OI.button(2, ControlMap.BACK_BUTTON))
+      Turret.setSpin(OI.normalize(OI.axis(2, ControlMap.R_JOYSTICK_HORIZONTAL), -1.0, 1.0, 0.05));
+      Turret.setShooterVelocity(0.0);
+      if(!(OI.axis(2, ControlMap.RT) > 0.05) && !(OI.button(2, ControlMap.A_BUTTON)))
       {
         Loader.setSpinSpd(0.0);
       }
     }
 
+    if(OI.button(2, ControlMap.LB_BUTTON))
+      Turret.setShooterVelocity(Turret.getShooterVelocityFromDistance());
+    
+
     if(OI.button(2, ControlMap.BACK_BUTTON))
     {
       Loader.setSpinSpd(-0.5);
-      Turret.setShooter(-0.15);
+      Turret.setShooterRaw(-0.15);
       Intake.setSpd(-0.4);
     }
   }

@@ -85,10 +85,10 @@ public class Chassis implements RobotMap{
         BRMax.setMaxSpd(-maxSpd, maxSpd);
         FLMax.setMaxSpd(-maxSpd, maxSpd);
         BLMax.setMaxSpd(-maxSpd, maxSpd);
-        FRMax.setDistance(-dist/RobotMap.WHEEL_CIRC, ControlType.kPosition);
-        BRMax.setDistance(-dist/RobotMap.WHEEL_CIRC, ControlType.kPosition);
-        FLMax.setDistance(-dist/RobotMap.WHEEL_CIRC, ControlType.kPosition);
-        BLMax.setDistance(-dist/RobotMap.WHEEL_CIRC, ControlType.kPosition);
+        BLMax.setTarget(-dist/RobotMap.WHEEL_CIRC, ControlType.kPosition);
+        FRMax.setTarget(-dist/RobotMap.WHEEL_CIRC, ControlType.kPosition);
+        BRMax.setTarget(-dist/RobotMap.WHEEL_CIRC, ControlType.kPosition);
+        FLMax.setTarget(-dist/RobotMap.WHEEL_CIRC, ControlType.kPosition);
         FRMax.setMaxSpd(-1.0, 1.0);
         BRMax.setMaxSpd(-1.0, 1.0);
         FLMax.setMaxSpd(-1.0, 1.0);

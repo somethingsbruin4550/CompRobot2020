@@ -10,10 +10,10 @@ import edu.wpi.first.wpilibj.DigitalOutput;
  */
 public class LemonLight{
     public static NetworkTableInstance table = NetworkTableInstance.getDefault();
-    public static NetworkTable cam = table.getTable("chameleon-vision").getSubTable("USB Camera-B4.09.24.1");
-    public static NetworkTableEntry yaw = cam.getEntry("yaw");
-    public static NetworkTableEntry is_valid = cam.getEntry("is_valid");
-    public static NetworkTableEntry pose = cam.getEntry("pose");
+    public static NetworkTable cam = table.getTable("chameleon-vision").getSubTable("USB-Camera");
+    public static NetworkTableEntry yaw = cam.getEntry("targetYaw");
+    public static NetworkTableEntry is_valid = cam.getEntry("isValid");
+    public static NetworkTableEntry pose = cam.getEntry("targetPose");
     
     private static DigitalOutput relay;
 

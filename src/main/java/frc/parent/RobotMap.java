@@ -26,7 +26,7 @@ public interface RobotMap {
     // Motor Ports for Intake
     public static final int INTAKE = 8;
     public static final boolean INTAKE_REVERSE = false;
-    public static final double INTAKE_SPD = 0.7;
+    public static final double INTAKE_SPD = 0.40;
     public static final int INTAKE_SOLENOID_ONE = 5;
     public static final int INTAKE_SOLENOID_TWO = 4;
 
@@ -41,7 +41,7 @@ public interface RobotMap {
 
     public static final int SPINDEXER = 7;
     public static final boolean SPINDEXER_REVERSE = true;
-    public static final double SPINDEXER_SPEED = 0.5;
+    public static final double SPINDEXER_SPEED = 0.35;
 
     // Motor ports for the yeeter
     public static final int SHOOTER_ONE = 9;
@@ -52,7 +52,7 @@ public interface RobotMap {
     public static final int TURRET = 5;
     public static final boolean TURRET_REVERSE = true;
     public static final double TURRET_SPD = 0.25;
-    public static final double TURRET_TARGETING_THRESHOLD = 5.0;
+    public static final double TURRET_TARGETING_THRESHOLD = 1.0;
 
     public static final double WHEEL_CIRC = 7.25 * Math.PI;
 

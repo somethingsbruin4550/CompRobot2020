@@ -39,7 +39,7 @@ public class Intake implements RobotMap
         }
         else
         {
-            max.setSpd(0.0);
+            max.setSpd(-spd);
         }
     }
 

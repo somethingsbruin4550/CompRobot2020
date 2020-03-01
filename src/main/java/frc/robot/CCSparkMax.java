@@ -75,8 +75,8 @@ public class CCSparkMax extends CANSparkMax{
      * Sets the position(in encoder tics) of the neo
      * @param ref Position in encoder tics
      */
-    public void setDistance(double dist, ControlType controlType){
-        pidController.setReference(dist, controlType);
+    public void setTarget(double tar, ControlType controlType){
+        pidController.setReference(tar, controlType);
     }
 
     /**
