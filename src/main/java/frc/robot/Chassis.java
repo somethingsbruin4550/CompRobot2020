@@ -145,7 +145,7 @@ public class Chassis implements RobotMap{
      */
     public static double getPos()
     {
-        return -((FRMax.getPosition() + BRMax.getPosition() + FLMax.getPosition() + BLMax.getPosition())/4);
+        return -((FRMax.getPosition() + BRMax.getPosition() + FLMax.getPosition() + BLMax.getPosition())/4) * RobotMap.WHEEL_CIRC;
         // return -FRMax.getPosition() * WHEEL_CIRC;
     }
 

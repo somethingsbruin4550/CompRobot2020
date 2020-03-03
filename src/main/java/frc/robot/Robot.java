@@ -108,7 +108,7 @@ public class Robot extends TimedRobot implements RobotMap, ControlMap {
       // System.out.println("Shooter Velocity: " + Turret.getShooterVelocityFromDistance());
       // System.out.println("Shoter Current" + Turret.getShooterCurrent());
 
-      System.out.println("Chassis Pos: " + Chassis.getPos());
+      System.out.println("Chassis Pos: " + Chassis.getPos() / 12.0 + " ft.");
       // System.out.println("Chassis Angle: " + Chassis.getAngle());
       
       printCount = 0;
@@ -181,17 +181,37 @@ public class Robot extends TimedRobot implements RobotMap, ControlMap {
         break;
       case kCrossShootReload:
         Intake.setExtended(true);
-        Intake.setSpd(RobotMap.INTAKE_SPD);
-        Chassis.setTargetDistance(10.0 * 12.0, 0.3);
+        Intake.setSpd(0.55);
+        Loader.setLoaderSpd(RobotMap.LOADER_REV_SPEED);
+        Loader.setSpinSpd(RobotMap.SPINDEXER_SPEED);
+
+        Chassis.setTargetDistance(10.0 * 12.0, 0.3); //Moves to pickup a single power cell from the trench run
         while(!(Chassis.getPos() < 9.75 * 12.0));
         Intake.setExtended(false);
         Intake.setSpd(0.0);
-        Chassis.setTargetDistance(5.0 * 12.0, 0.3);
-        while(!(Chassis.getPos() > 5.25 * 12.0));
+
         Turret.setShooterVelocity(Turret.getShooterVelocityFromDistance());
         Turret.lockOnForTime(0.75);
         Turret.setShooterVelocity(Turret.getShooterVelocityFromDistance());
+        while(Loader.spinMax.getPosition() < 0.90)
+        {
+          Loader.setLoaderSpd(RobotMap.LOADER_FWD_SPEED);
+          Loader.setSpinSpd(RobotMap.SPINDEXER_AUTO_SPEED);
+        }
+        Turret.setShooterVelocity(0.0);
+
+        Intake.setExtended(true);
+        Intake.setSpd(0.55);
+        Loader.setLoaderSpd(RobotMap.LOADER_REV_SPEED);
+        Loader.setSpinSpd(RobotMap.SPINDEXER_SPEED);
+
+        Chassis.setTargetDistance(5.0 * 12.0, 0.3); //Moves to pickup the remaining four power cells from the trench run
+        while(!(Chassis.getPos() > 5.25 * 12.0));
         
+        Intake.setExtended(false);
+        Intake.setSpd(0.0);
+        Loader.setLoaderSpd(0.0);
+        Loader.setSpinSpd(0.0);
         
       case kDefaultAuto:
         break;

@@ -33,8 +33,11 @@ public interface RobotMap {
     public static final int INTAKE_SOLENOID_TWO = 4;
 
 
-    // Motor ports for Climber
-    // public static final int CLIMBER = -1;
+    public static final int CLIMBER_ONE = 11;
+    public static final boolean CLIMBER_ONE_REVERSE = false;
+    public static final int CLIMBER_TWO = 12;
+    public static final boolean CLIMBER_TWO_REVERSE = false;
+    public static final int CLIMBER_SOL = 3;
 
     public static final int LOADER = 6;
     public static final boolean LOADER_REVERSE = false;
@@ -44,7 +47,7 @@ public interface RobotMap {
     public static final int SPINDEXER = 7;
     public static final boolean SPINDEXER_REVERSE = true;
     public static final double SPINDEXER_SPEED = 0.35;
-    public static final double SPINDEXER_AUTO_SPEED = 0.50;
+    public static final double SPINDEXER_AUTO_SPEED = 0.60;
 
     // Motor ports for the yeeter
     public static final int SHOOTER_ONE = 9;
