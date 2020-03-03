@@ -103,7 +103,7 @@ public class Turret implements RobotMap{
         }
         else
         {
-            System.out.println("No Target");
+            // System.out.println("No Target");
             setSpin(0.0);
             maxTurret.setSpd(0.0);
            // maxShooter2.setVelocity(0.85);

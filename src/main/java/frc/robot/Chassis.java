@@ -20,10 +20,10 @@ public class Chassis implements RobotMap{
 
     public static AHRS gyro = new AHRS(SPI.Port.kMXP);
 
-    public static CCSparkMax FRMax = new CCSparkMax(RobotMap.FORWARD_RIGHT, MotorType.kBrushless, IdleMode.kBrake, RobotMap.FR_REVERSE);
-    public static CCSparkMax BRMax = new CCSparkMax(RobotMap.BACK_RIGHT, MotorType.kBrushless, IdleMode.kBrake, RobotMap.BR_REVERSE);
-    public static CCSparkMax FLMax = new CCSparkMax(RobotMap.FORWARD_LEFT, MotorType.kBrushless, IdleMode.kBrake, RobotMap.FL_REVERSE);
-    public static CCSparkMax BLMax = new CCSparkMax(RobotMap.BACK_LEFT, MotorType.kBrushless, IdleMode.kBrake, RobotMap.BL_REVERSE);
+    public static CCSparkMax FRMax = new CCSparkMax(RobotMap.FORWARD_RIGHT, MotorType.kBrushless, IdleMode.kCoast, RobotMap.FR_REVERSE);
+    public static CCSparkMax BRMax = new CCSparkMax(RobotMap.BACK_RIGHT, MotorType.kBrushless, IdleMode.kCoast, RobotMap.BR_REVERSE);
+    public static CCSparkMax FLMax = new CCSparkMax(RobotMap.FORWARD_LEFT, MotorType.kBrushless, IdleMode.kCoast, RobotMap.FL_REVERSE);
+    public static CCSparkMax BLMax = new CCSparkMax(RobotMap.BACK_LEFT, MotorType.kBrushless, IdleMode.kCoast, RobotMap.BL_REVERSE);
     
     public static Solenoid shiftSolOne = new Solenoid(RobotMap.SHIFT_SOLENOID_ONE);
     public static Solenoid shiftSolTwo = new Solenoid(RobotMap.SHIFT_SOLENOID_TWO);
@@ -89,10 +89,6 @@ public class Chassis implements RobotMap{
         FRMax.setTarget(-dist/RobotMap.WHEEL_CIRC, ControlType.kPosition);
         BRMax.setTarget(-dist/RobotMap.WHEEL_CIRC, ControlType.kPosition);
         FLMax.setTarget(-dist/RobotMap.WHEEL_CIRC, ControlType.kPosition);
-        FRMax.setMaxSpd(-1.0, 1.0);
-        BRMax.setMaxSpd(-1.0, 1.0);
-        FLMax.setMaxSpd(-1.0, 1.0);
-        BLMax.setMaxSpd(-1.0, 1.0);
     }
 
     /**
@@ -149,7 +145,8 @@ public class Chassis implements RobotMap{
      */
     public static double getPos()
     {
-        return (FRMax.getPosition() + BRMax.getPosition() + FLMax.getPosition() + BLMax.getPosition())/4;
+        return -((FRMax.getPosition() + BRMax.getPosition() + FLMax.getPosition() + BLMax.getPosition())/4);
+        // return -FRMax.getPosition() * WHEEL_CIRC;
     }
 
     /**
@@ -162,6 +159,11 @@ public class Chassis implements RobotMap{
         BRMax.setPosition(0);
         FLMax.setPosition(0);
         BLMax.setPosition(0);
+
+        FRMax.setMaxSpd(-1.0, 1.0);
+        BRMax.setMaxSpd(-1.0, 1.0);
+        FLMax.setMaxSpd(-1.0, 1.0);
+        BLMax.setMaxSpd(-1.0, 1.0);
     }
 
     /**

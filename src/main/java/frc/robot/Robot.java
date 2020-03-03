@@ -34,8 +34,9 @@ public class Robot extends TimedRobot implements RobotMap, ControlMap {
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
   private static final String kCrossLine = "Cross Line";
-  private static final String kMoveShoot = "Cross Line and Shoot";
-  private static final String kResetPIDs = "Reset PIDs";
+  private static final String kCrossShoot = "Cross Line and Shoot";
+  private static final String kCrossShootReload = "Cross Line, Shoot, and Reload";
+  private static final String kTest = "Test Auto";
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
   Compressor compressor = new Compressor();
@@ -57,22 +58,18 @@ public class Robot extends TimedRobot implements RobotMap, ControlMap {
    */
   @Override
   public void robotInit() {
+    LemonLight.setLightChannel(0);
     resetAll();
     
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     m_chooser.addOption("Cross Line", kCrossLine);
-    m_chooser.addOption("Cross Line and Shoot", kMoveShoot);
-    m_chooser.addOption("Reset PID Values", kResetPIDs);
+    m_chooser.addOption("Cross Line and Shoot", kCrossShoot);
+    m_chooser.addOption("Cross Line, Shoot, and Reload", kCrossShootReload);
+    m_chooser.addOption("Test Auto", kTest);
     SmartDashboard.putData("Auto choices", m_chooser);
 
     SmartDashboard.putNumber("Shooter Spd", 1.0);
-    
-    LemonLight.setLightChannel(0);
-
-    Turret.maxTurret.setPID(0.05, 0.0, 0.0, 0.0);
-    // Turret.maxTurret.setMaxSpd(-0.15, 0.15);
-    Turret.maxShooter2.setPID(0.05, 0.0, 0.0, 0.0);
 
     printCount = 0;
   
@@ -101,7 +98,7 @@ public class Robot extends TimedRobot implements RobotMap, ControlMap {
    */
   @Override
   public void robotPeriodic() {
-    if(printCount > 7)
+    if(printCount > 5)
     {
      // System.out.println("Angle: " + Chassis.getAngle());
     //  System.out.println("Position: " + Chassis.driveLeft.getPosition());
@@ -109,6 +106,11 @@ public class Robot extends TimedRobot implements RobotMap, ControlMap {
       // System.out.println("Turret Encoder: " + Turret.maxTurret.)
       // System.out.println("Dist to Target: " + LemonLight.distToTarget());
       // System.out.println("Shooter Velocity: " + Turret.getShooterVelocityFromDistance());
+      // System.out.println("Shoter Current" + Turret.getShooterCurrent());
+
+      System.out.println("Chassis Pos: " + Chassis.getPos());
+      // System.out.println("Chassis Angle: " + Chassis.getAngle());
+      
       printCount = 0;
     }
     printCount++;
@@ -125,6 +127,8 @@ public class Robot extends TimedRobot implements RobotMap, ControlMap {
     yButton.tick();
 
     // System.out.println(Loader.spinMax.getPosition());
+    // System.out.println("Shoter Current" + Turret.getShooterCurrent());
+    
       
   }
 
@@ -141,8 +145,7 @@ public class Robot extends TimedRobot implements RobotMap, ControlMap {
    */
   @Override
   public void autonomousInit() {
-    Chassis.resetAll();
-    Chassis.setPID(0.5, 0, 0, 0);
+    resetAll();   
 
     m_autoSelected = m_chooser.getSelected();
     // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
@@ -156,29 +159,51 @@ public class Robot extends TimedRobot implements RobotMap, ControlMap {
         //Chassis.setAngle(5);
         break;
       case kCrossLine:
-        Chassis.setTargetDistance(4.0 * 12.0, 0.2);
+        Chassis.setTargetDistance(4.0 * 12.0, 0.3);
         break;
-      case kMoveShoot:
-        Chassis.setTargetDistance(4.0 * 12.0, 0.2);
-        Turret.lockOnForTime(3);
-        Loader.setLoaderSpd(RobotMap.LOADER_FWD_SPEED);
-        Loader.spinMax.setPosition(0.0);
-        Loader.setSpinSpd(RobotMap.SPINDEXER_SPEED);
-        while(Loader.spinMax.getPosition() < 1000.0);
+      case kCrossShoot:
+        Chassis.setTargetDistance(4.0 * 12.0, 0.3);
+        while(!(Chassis.getPos() < 3.8 * 12.0));
+        Timer.delay(2.5);
+        Turret.setShooterVelocity(Turret.getShooterVelocityFromDistance());
+        Turret.lockOnForTime(0.75);
+        Turret.setShooterVelocity(Turret.getShooterVelocityFromDistance());
+        Timer.delay(1.5);
+        Loader.reset();
+        while(Loader.spinMax.getPosition() < 0.90)
+        {
+          Loader.setLoaderSpd(RobotMap.LOADER_FWD_SPEED);
+          Loader.setSpinSpd(RobotMap.SPINDEXER_AUTO_SPEED);
+        }
+        Loader.setLoaderSpd(0.0);
         Loader.setSpinSpd(0.0);
-        Loader.setLoaderSpd(RobotMap.LOADER_REV_SPEED);
-        Turret.setSpin(0.0);
-        Turret.maxShooter1.disable();
-        Turret.maxShooter2.disable();
+        Turret.setShooterVelocity(0.0);
         break;
+      case kCrossShootReload:
+        Intake.setExtended(true);
+        Intake.setSpd(RobotMap.INTAKE_SPD);
+        Chassis.setTargetDistance(10.0 * 12.0, 0.3);
+        while(!(Chassis.getPos() < 9.75 * 12.0));
+        Intake.setExtended(false);
+        Intake.setSpd(0.0);
+        Chassis.setTargetDistance(5.0 * 12.0, 0.3);
+        while(!(Chassis.getPos() > 5.25 * 12.0));
+        Turret.setShooterVelocity(Turret.getShooterVelocityFromDistance());
+        Turret.lockOnForTime(0.75);
+        Turret.setShooterVelocity(Turret.getShooterVelocityFromDistance());
+        
+        
       case kDefaultAuto:
         break;
-      case kResetPIDs:
+      case kTest:
+        Chassis.setTargetDistance(5.0 * 12.0, 0.2);
         break;
       default:
         
         break;
     }
+
+    System.out.println("Auto Finished!");
 
   }
 
@@ -187,19 +212,18 @@ public class Robot extends TimedRobot implements RobotMap, ControlMap {
    */
   @Override
   public void autonomousPeriodic() {
-    Turret.setShooterVelocity(SmartDashboard.getNumber("Shooter Spd", 0.0));
+    // Turret.setShooterVelocity(SmartDashboard.getNumber("Shooter Spd", 0.0));
   }
 
   @Override
   public void teleopInit() {
-    Chassis.resetAll();
-    Turret.reset();
-    LemonLight.setLight(true);
+    resetAll();
 
     OI.initJoysticks();
-    Intake.setExtended(false);
 
     System.out.println("Shooter Speed: " + SmartDashboard.getNumber("Shooter Spd", 0.0));
+
+    // Chassis.setFastMode(false);
   }
 
   /**
@@ -210,11 +234,11 @@ public class Robot extends TimedRobot implements RobotMap, ControlMap {
   
     // //Basic Driving
     //  Chassis.driveAxis(OI.axis(0, PilotMap.Y_AXIS), OI.axis(1, PilotMap.X_AXIS));
-    Chassis.driveAxis(OI.normalize(OI.axis(0, PilotMap.Y_AXIS), -0.3, 0.3, 0.05), OI.normalize(OI.axis(1, PilotMap.X_AXIS), -0.3, 0.3, 0.05));
+    Chassis.driveAxis(OI.normalize(OI.axis(0, PilotMap.Y_AXIS), -RobotMap.DRIVE_SPD, RobotMap.DRIVE_SPD, 0.05), OI.normalize(OI.axis(1, PilotMap.X_AXIS), -RobotMap.DRIVE_SPD, RobotMap.DRIVE_SPD, 0.05));
     //Chassis.driveAxis(OI.normalize(OI.axis(2, ControlMap.L_JOYSTICK_VERTICAL), -0.3, 0.3, 0.05), OI.normalize(OI.axis(2, ControlMap.L_JOYSTICK_HORIZONTAL), -0.3, 0.3, 0.05));
     Chassis.drive();
     // //Shifting Gearbox Control
-    Chassis.setFastMode(OI.button(0, PilotMap.TRIGGER));
+    // Chassis.setFastMode(OI.button(0, PilotMap.TRIGGER));
     // Chassis.setFastMode(OI.button(2, ControlMap.B_BUTTON));
 
     //Extends Intake, if extended, spin
@@ -268,7 +292,7 @@ public class Robot extends TimedRobot implements RobotMap, ControlMap {
     }
     else
     {
-      Turret.setSpin(OI.normalize(OI.axis(2, ControlMap.R_JOYSTICK_HORIZONTAL), -1.0, 1.0, 0.05));
+      Turret.setSpin(OI.normalize(OI.axis(2, ControlMap.R_JOYSTICK_HORIZONTAL), -0.5, 0.5, 0.05));
       Turret.setShooterVelocity(0.0);
       if(!(OI.axis(2, ControlMap.RT) > 0.05) && !(OI.button(2, ControlMap.A_BUTTON)))
       {
@@ -308,7 +332,13 @@ public class Robot extends TimedRobot implements RobotMap, ControlMap {
   private void resetAll()
   {
     Chassis.resetAll();
+    Chassis.setPID(0.5, 0, 0, 0);
+    Turret.maxTurret.setPID(0.05, 0.0, 0.0, 0.0);
+    Turret.maxShooter2.setPID(0.5, 0.0, 0.0, 0.0);
     Turret.reset();
     Loader.reset();
+    LemonLight.setLight(true);
+    Intake.setExtended(false);
+    System.out.println("RESET ALL");
   }
 }
