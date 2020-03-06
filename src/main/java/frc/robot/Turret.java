@@ -49,7 +49,7 @@ public class Turret implements RobotMap{
      */
     public static void setShooterRaw(double spd)
     {
-       // maxShooter1.setSpd(spd);
+       maxShooter1.setSpd(spd);
         maxShooter2.setSpd(spd);
         // System.out.println(maxShooter1.getOutputCurrent());
     }
@@ -60,7 +60,7 @@ public class Turret implements RobotMap{
      */
     public static void setShooterVelocity(double vel)
     {
-       // maxShooter1.setSpd(spd);
+       maxShooter1.setSpd(vel);
         maxShooter2.setSpd(vel);
         // System.out.println(maxShooter1.getOutputCurrent());
     }

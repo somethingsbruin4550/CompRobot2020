@@ -12,7 +12,7 @@ import frc.parent.*;
 public class Loader implements RobotMap
 {
     public static CCSparkMax spinMax = new CCSparkMax(RobotMap.SPINDEXER, MotorType.kBrushless, IdleMode.kBrake, RobotMap.SPINDEXER_REVERSE);
-    public static CCSparkMax loaderMax = new CCSparkMax(RobotMap.LOADER, MotorType.kBrushed, IdleMode.kBrake, RobotMap.LOADER_REVERSE);
+    public static CCSparkMax loaderMax = new CCSparkMax(RobotMap.LOADER, MotorType.kBrushless, IdleMode.kBrake, RobotMap.LOADER_REVERSE);
 
     /**
      * Sets the spd of the SPINDEXER
@@ -20,7 +20,7 @@ public class Loader implements RobotMap
      */
     public static void setSpinSpd(double spd)
     {
-       spinMax.setSpd(spd);
+    //    spinMax.setSpd(spd);
     }
 
     /**
@@ -37,5 +37,9 @@ public class Loader implements RobotMap
         spinMax.setPosition(0.0);
         spinMax.setPositionConversionFactor(1.0/462.2);
         loaderMax.setPosition(0.0);
+    }
+
+    public static double printSpin(){
+        return spinMax.getOutputCurrent();
     }
 }

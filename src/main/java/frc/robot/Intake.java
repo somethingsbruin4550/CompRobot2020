@@ -14,7 +14,7 @@ import frc.parent.*;
 
 public class Intake implements RobotMap
 {
-    public static CCSparkMax max = new CCSparkMax(RobotMap.INTAKE, MotorType.kBrushed, IdleMode.kBrake, RobotMap.INTAKE_REVERSE);
+    public static CCSparkMax max = new CCSparkMax(RobotMap.INTAKE, MotorType.kBrushless, IdleMode.kBrake, RobotMap.INTAKE_REVERSE);
     public static Solenoid sol1 = new Solenoid(RobotMap.INTAKE_SOLENOID_ONE);
     public static Solenoid sol2 = new Solenoid(RobotMap.INTAKE_SOLENOID_TWO);
 
