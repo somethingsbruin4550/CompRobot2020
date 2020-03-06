@@ -40,10 +40,7 @@ public class Robot extends TimedRobot implements RobotMap, ControlMap {
   private static final String kTest = "Test Auto";
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
- // Compressor compressor = new Compressor();
-  // private CCSparkMax fly = new CCSparkMax(2, MotorType.kBrushless, IdleMode.kBrake, false);
-  // private CCSparkMax turret = new CCSparkMax(1, MotorType.kBrushless, IdleMode.kBrake, false);
-  // private Turret turret = new Turret(); 
+  Compressor compressor = new Compressor();
 
   private static ReleasableButton yButton = new ReleasableButton();
 
@@ -238,8 +235,6 @@ public class Robot extends TimedRobot implements RobotMap, ControlMap {
   @Override
   public void autonomousPeriodic() {
     // Turret.setShooterVelocity(SmartDashboard.getNumber("Shooter Spd", 0.0));
-    // Loader.setSpinSpd(1.0);
-    // System.out.println(Loader.printSpin());
   }
 
   @Override
@@ -321,27 +316,7 @@ public class Robot extends TimedRobot implements RobotMap, ControlMap {
       Loader.setSpinSpd(-0.5);
       Turret.setShooterRaw(-0.15);
       Intake.setSpd(-0.4);
-    }
-
-    // Chassis.driveAxis(OI.normalize(OI.axis(2, ControlMap.L_JOYSTICK_VERTICAL), -0.3, 0.3, 0.05), OI.normalize(OI.axis(2, ControlMap.L_JOYSTICK_HORIZONTAL), -0.3, 0.3, 0.05));
-    // Chassis.driveAxis(OI.axis(0, PilotMap.Y_AXIS), OI.axis(1, PilotMap.X_AXIS));
-    // Intake.setExtended(yButton.updateButton(OI.button(2, ControlMap.Y_BUTTON), 25));
-
-    // Chassis.setFastMode(OI.button(2, ControlMap.B_BUTTON));
-    // Intake.setExtended(OI.button(2, ControlMap.Y_BUTTON));
-
-    // System.out.println(yButton.updateButton(OI.button(2, ControlMap.Y_BUTTON), 0.5));
-    // System.out.println(Turret.getEncoder());
-
-
-    // if(OI.button(2, ControlMap.LB_BUTTON))
-    // {
-    //     Turret.lockOn();
-    //     // Turret.setShooter(OI.normalize(LemonLight.distToTarget() / 10.0, 0.0, 1.0));
-    // }
-    // else 
-    //   Turret.setSpin(OI.normalize(OI.axis(2, ControlMap.R_JOYSTICK_HORIZONTAL), -0.3, 0.3, 0.05));
-    
+    }    
   }
 
   @Override
@@ -375,6 +350,7 @@ public class Robot extends TimedRobot implements RobotMap, ControlMap {
   {
     Chassis.resetAll();
     Chassis.setPID(0.5, 0, 0, 0);
+    Chassis.setFastMode(false);
     Turret.maxTurret.setPID(0.05, 0.0, 0.0, 0.0);
     Turret.maxShooter2.setPID(0.5, 0.0, 0.0, 0.0);
     Turret.reset();

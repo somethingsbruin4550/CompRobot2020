@@ -27,8 +27,8 @@ public interface RobotMap {
 
     // Motor Ports for Intake
     public static final int INTAKE = 6;
-    public static final boolean INTAKE_REVERSE = false;
-    public static final double INTAKE_SPD = 0.40;
+    public static final boolean INTAKE_REVERSE = true;
+    public static final double INTAKE_SPD = 0.6;
     public static final int INTAKE_SOLENOID_ONE = 5;
     public static final int INTAKE_SOLENOID_TWO = 4;
 
