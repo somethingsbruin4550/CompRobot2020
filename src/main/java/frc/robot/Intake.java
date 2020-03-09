@@ -24,8 +24,8 @@ public class Intake implements RobotMap
      */
     public static void setExtended(boolean extended)
     {
-        sol1.set(!extended);
-        sol2.set(extended);
+        sol1.set(extended);
+        sol2.set(!extended);
     }
 
     /**

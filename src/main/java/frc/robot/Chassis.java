@@ -122,8 +122,8 @@ public class Chassis implements RobotMap{
             FLMax.setPositionConversionFactor(0.048);
             BLMax.setPositionConversionFactor(0.048);
         }
-        shiftSolOne.set(fastMode);
-        shiftSolTwo.set(!fastMode);
+        shiftSolOne.set(!fastMode);
+        shiftSolTwo.set(fastMode);
 
         FRMax.setPosition(0);
         BRMax.setPosition(0);
