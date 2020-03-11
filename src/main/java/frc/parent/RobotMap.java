@@ -27,7 +27,7 @@ public interface RobotMap {
 
     // Motor Ports for Intake
     public static final int INTAKE = 6;
-    public static final boolean INTAKE_REVERSE = true;
+    public static final boolean INTAKE_REVERSE = false;
     public static final double INTAKE_SPD = 0.6;
     public static final int INTAKE_SOLENOID_ONE = 2;
     public static final int INTAKE_SOLENOID_TWO = 3;
@@ -61,6 +61,7 @@ public interface RobotMap {
     public static final boolean TURRET_REVERSE = false;
     public static final double TURRET_SPD = 0.25;
     public static final double TURRET_TARGETING_THRESHOLD = 1.0;
+    public static final double TURRET_RANGE = 90; 
 
     public static final double WHEEL_CIRC = 7.25 * Math.PI;
 

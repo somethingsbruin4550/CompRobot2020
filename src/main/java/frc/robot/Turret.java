@@ -35,9 +35,9 @@ public class Turret implements RobotMap{
      * @param spd Domina: [-1, 1]
      */
     public static void setSpin(double spd){
-        if(spd > 0 && !(getEncoder() > 90))
+        if(spd > 0 && !(getEncoder() > TURRET_RANGE))
             maxTurret.setSpd(spd);
-        else if(spd < 0 && !(getEncoder() < -90))
+        else if(spd < 0 && !(getEncoder() < -TURRET_RANGE))
             maxTurret.setSpd(spd);
         else 
             maxTurret.setSpd(0);
@@ -82,6 +82,7 @@ public class Turret implements RobotMap{
 
     public static void reset(){
         maxTurret.setPosition(0);
+        Turret.maxTurret.setIdleMode(IdleMode.kBrake);
     }
 
     public static void restrictTurret(){
